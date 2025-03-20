@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PlayList = () => {
+const SearchHeader = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const PlayList = () => {
   )
 }
 
-export default PlayList
+export default SearchHeader

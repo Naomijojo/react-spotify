@@ -1,10 +1,10 @@
-import React from 'react'
+
 
 const Header = () => {
   return (
-    <div>
-      Header
-    </div>
+    <header className="header-wrapper flex " >
+       Header
+    </header>
   )
 }
 

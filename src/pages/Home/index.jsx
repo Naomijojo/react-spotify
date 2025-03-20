@@ -1,9 +1,9 @@
-import React from 'react'
 
 const Home = () => {
   return (
     <div>
-      123
+      <div className="pt-[72px]" style={{backgroundColor:'#212121'}}></div>
+      Home
     </div>
   )
 }

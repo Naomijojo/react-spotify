@@ -11,7 +11,7 @@ const Layout = () => {
     if (location.pathname === '/search') {
       return <SearchHeader />
     }
-    if (location.pathname === '/playlist') {
+    if (location.pathname.startsWith('/playlist')) {
       return <PlaylistHeader />
     }
     if (location.pathname === '/search/recent'){

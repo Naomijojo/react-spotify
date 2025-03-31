@@ -9,7 +9,7 @@
 *{
   box-sizing: border-box; 
 }
-body{
+html, body{
   background-color: #121212;
   color: #FFFFFF;
   font-family: "Noto Sans", "Apple Casual", Corbel, "Microsoft JhengHei Fixed", "Microsoft JhengHei", sans-serif;
@@ -20,4 +20,21 @@ select {
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
+}
+.ant-drawer-content-wrapper {
+  width: 430px !important; 
+}
+.ant-drawer-close{
+  position: absolute;
+  right: 0;
+  margin-inline-end: 22px;
+
+}
+.ant-drawer-header{
+  background-color: pink;
+  padding: 36px !important;
+  height: 72px !important;
+}
+.ant-drawer .ant-drawer-close {
+  margin-inline-end: none;
 }

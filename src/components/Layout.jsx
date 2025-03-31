@@ -1,28 +1,41 @@
-import { Outlet } from 'react-router-dom'
-// import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import Header from "./Header"
 import Footer from "./Footer"
-// import SearchHeader from './SearchHeader';
+import SearchHeader from './SearchHeader';
+import PlaylistHeader from './PlayListHeader';
 
 const Layout = () => {
-  // const location = useLocation() 
+  const location = useLocation() 
 
-  // const getHeader = () => {
-  //   if (location.pathname.startsWith('/search')) {
-  //     return <SearchHeader />;
-  //   }
-  //   return <Header />;
-  // }
+  const getHeader = () => {
+    if (location.pathname === '/search') {
+      return <SearchHeader />
+    }
+    if (location.pathname === '/playlist') {
+      return <PlaylistHeader />
+    }
+    if (location.pathname === '/search/recent'){
+      return null
+    }
+    if (location.pathname === '/playlist'){
+      return null
+    }
+    return <Header />;
+  }
   
+  const showFooter = () => {
+    return location.pathname === '/'
+  }
+
+
   return (
     <div className="flex flex-col min-h-screen">
-     <Header />
-      
-      <main>
+      {getHeader()}
+      <main className='flex-1 content-container'>
         <Outlet />
       </main>
 
-      <Footer />
+      {showFooter() && <Footer />}
     </div>
   );
 };

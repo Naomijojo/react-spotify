@@ -1,29 +1,37 @@
 import { createBrowserRouter } from "react-router-dom";
-// import Layout from "@/components/Layout";
-import { Home,  } from "@/pages";
+import Layout from "@/components/Layout";
+import { Home, Search, SearchRecent, PlayList, Premium, NotFound } from "@/pages";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
-    // children: [
-    //   { 
-    //     path: "/",
-    //     element: < Home /> 
-    //   },
-    //   {
-    //     path:"/search",
-    //     element: < Search />
-    //   },
-    //   {
-    //     path:"/playlist",
-    //     element: < Playlist />
-    //   },
-    //   {
-    //     path: "*",
-    //     element: < NotFound />
-    //   }  
-    // ]
+    element: <Layout />,
+    children: [
+      { 
+        path: "/",
+        element: <Home /> 
+      },
+      {
+        path:"/search",
+        element: <Search />
+      },
+      {
+        path:"/search/recent",
+        element: <SearchRecent />
+      },
+      {
+        path:"/playlist",
+        element: <PlayList />
+      },
+      {
+        path:"/premium",
+        element: <Premium />
+      },
+      {
+        path: "*",
+        element: <NotFound />
+      }  
+    ]
   }
 ])
 

@@ -1,0 +1,75 @@
+[
+  {
+    "id": 1,
+    "image": "https://i.scdn.co/image/ab67616d0000485172c6a3908a663c6c7cdc17c6",
+    "title": "我就想你",
+    "artist": "理想混蛋",
+    "category": "news" 
+  },
+  {
+    "id": 2,
+    "image": "https://i.scdn.co/image/ab67616d00004851ca3828c15ca2a3127e826140",
+    "title": "每一秒鐘",
+    "artist": "顏人中" ,
+    "category": "news" 
+  },
+  {
+    "id": 3,
+    "image": "https://i.scdn.co/image/ab67616d000048517ac8bd38a0a6dba6714f3340",
+    "title": "等雨停",
+    "artist": "en" ,
+    "category": "news" 
+  },
+  {
+    "id": 4,
+    "image": "https://i.scdn.co/image/ab67616d0000485149534b1fcbae63b6a657571a",
+    "title": "妥協",
+    "artist": "蔡依林" ,
+    "category": "news"
+  },
+  {
+    "id": 5,
+    "image": "https://i.scdn.co/image/ab67616d00004851ba16f5c6c4e2d873996a81a7",
+    "title": "怎樣？",
+    "artist": "戴佩妮" ,
+    "category": "news" 
+  },
+  {
+    "id": 6,
+    "image": "https://i.scdn.co/image/ab67616d00004851ef2074974537938d6449717a",
+    "title": "當你",
+    "artist": "王心凌" ,
+    "category": "news" 
+  },
+  {
+    "id": 7,
+   "image": "https://i.scdn.co/image/ab67616d0000485190547cb5612887856622befd",
+    "title": "阿拉斯加海灣",
+    "artist": "Firdhaus" ,
+    "category": "news" 
+  },
+  {
+    "id": 8,
+    "image": "https://i.scdn.co/image/ab67616d000048515c6d418bd81b658309eb3582",
+    "title": "想太多",
+    "artist": "李玖哲" ,
+    "category": "news" 
+
+  },
+  {
+    "id": 9,
+    "image": "https://i.scdn.co/image/ab67616d00004851712a06e15547025bfd1850f2",
+    "title": "末班車",
+    "artist": "蕭煌奇" ,
+    "category": "news"  
+  },
+  {
+    "id": 10,
+    "image": "https://i.scdn.co/image/ab67616d000048516354395b4228508ac5c9969e",
+    "title": "我知道你很難過",
+    "artist": "蔡依林" ,
+    "category": "news" 
+  }
+]
+
+  

@@ -2,7 +2,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 import Header from "./Header"
 import Footer from "./Footer"
 import SearchHeader from './SearchHeader';
-import PlayListHeader from './PlayListHeader';
+import PlayHeader from './PlayHeader';
 import MiniPlayer from './MiniPlayer';
 
 const Layout = () => {
@@ -13,7 +13,7 @@ const Layout = () => {
       return <SearchHeader />
     }
     if (location.pathname === '/playlist'){
-      return <PlayListHeader />
+      return <PlayHeader />
     }
     if (location.pathname === '/search/recent'){
       return null

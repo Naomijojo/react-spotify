@@ -1,7 +1,7 @@
 import LOGO from '@/assets/images/icon/logo.svg'
 
 
-const PlayListHeader = () => {
+const PlayHeader = () => {
   return (
     <header className="header-wrapper fixed flex justify-between items-center w-[100vw]" >
       <div className="logo-box flex">
@@ -16,4 +16,4 @@ const PlayListHeader = () => {
     </header>
   )
 }
-export default PlayListHeader
+export default PlayHeader

@@ -16,7 +16,7 @@ const SearchRecent = () => {
           <i className="fa-solid fa-arrow-left fa-lg"></i>
         </button>
         <div className="flex w-full relative ml-2">
-          <i className="absolute top-[50%] left-3 fa-solid fa-lg fa-magnifying-glass" style={{ color: "#ffeeee", transform: "translateY(-50%)" }}></i>
+          <i className="absolute top-[50%] left-3 fa-solid fa-magnifying-glass" style={{ color: "#000", transform: "translateY(-50%)" }}></i>
           <input type="text" placeholder="想聽什麼？" className="search-input flex-1 pl-10 py-2 border border-gray-300 rounded-md" maxLength={"50"}
           />
         </div>

@@ -17,9 +17,6 @@ const Header = () => {
       <div className="logo-box">
         <img className='logo' src={LOGO} alt="LOGO" />
       </div>
-      {/* <button className="gears-box">
-        <img className='gears-icon' src={gearsIcon} alt="gearsIcon" />
-      </button> */}
       <Button
         type="text"
         icon={<img className='gears-icon' src={gearsIcon} alt="gearsIcon" />} // 使用 FontAwesome 的齒輪圖標
@@ -32,15 +29,36 @@ const Header = () => {
         onClose={closeDrawer} // 點擊關閉按鈕時觸發
         open={OpenDrawer} // 控制 Drawer 的顯示狀態
       >
-        <p>檢視帳戶</p>
-        <p>個人檔案</p>
-        <p>登出</p>
-        <p>-</p>
-        <p>Premium</p>
-        <p>支援</p>
-        <p>下載</p>
-        <p>隱私權</p>
-        <p>條款</p>
+      <div className="text-container flex flex-col justify-center items-start">
+        <button className='inline-flex gap-5 align-middle items-center py-2 w-[100%]' >
+          <span className='text-[20px] font-bold'>檢視帳戶</span>
+          <i className="fa-solid fa-angle-right fa-xl" style={{color: '#ffffff'}}></i>
+        </button>
+        <button className='inline-flex gap-5 align-middle items-center py-2 w-[100%]' >
+          <span className='text-[20px] font-bold'>個人檔案</span>
+        </button>
+        <button className='inline-flex gap-5 align-middle items-center py-2 w-[100%]' >
+          <span className='text-[20px] font-bold'>登出</span>
+        </button>
+        <div className="w-4 border border-solid my-6"></div>
+        <div className="flex flex-col gap-2">
+          <button className='inline-flex gap-5 align-middle items-center py-1 w-[100%]' >
+            <span className='text-[16px] font-bold'>Premium</span>
+          </button>
+          <button className='inline-flex gap-5 align-middle items-center py-1 w-[100%]' >
+            <span className='text-[16px] font-bold'>支援</span>
+          </button>
+          <button className='inline-flex gap-5 align-middle items-center py-1 w-[100%]' >
+            <span className='text-[16px] font-bold'>下載</span>
+          </button>
+          <button className='inline-flex gap-5 align-middle items-center py-1 w-[100%]' >
+            <span className='text-[16px] font-bold'>隱私權</span>
+          </button>
+          <button className='inline-flex gap-5 align-middle items-center py-1 w-[100%]' >
+            <span className='text-[16px] font-bold'>條款</span>
+          </button>
+        </div>
+      </div>
       </Drawer>
     </header>
   )

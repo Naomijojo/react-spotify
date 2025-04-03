@@ -1,3 +1,4 @@
+// import MiniPlayer from "@/components/MiniPlayer"
 import TabBar from "@/components/TabBar"
 // import MusicPlayer from "@/components/MusicPlayer"
 // import HomeCard from "@/components/HomeCard"
@@ -60,7 +61,7 @@ const Home = () => {
         <h3 className="homeSection-encoreTitle mt-6 mb-3">你的熱門合輯</h3>
         <div className="homeCard-container">
           <div className="homeCard">
-            <img className="homeCard-image w-[152px] h-[152px] mb-2 rounded-2xl" src="https://seed-mix-image.spotifycdn.com/v6/img/mandopop/2elBjNSdBE2Y3f0j1mjrql/en-GB/default" alt="" />
+            <img className="homeCard-image w-[152px] h-[152px] mb-2 rounded-2xl" src="https://seed-mix-image.spotifycdn.com/v6/img/mandopop/19nBOLVLKxrijWEvjpXFI8/zh-Hant/default" alt="" />
             <div className="homeCard-title">華語流行音樂合輯</div>
           </div>
           <div className="homeCard">
@@ -315,6 +316,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+      {/* <MiniPlayer className="" /> */}
       <TabBar className="absolute bottom-0 left-0 w-full pl-0"/>
     </div>
   )

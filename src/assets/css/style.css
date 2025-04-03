@@ -236,7 +236,31 @@
   border-radius: 4px;
   min-height: 76px;
 }
+.gradient {
+  background-image: linear-gradient(
+    315deg,
+    hsl(188deg 59% 58%) 0%,
+    hsl(190deg 58% 53%) 8%,
+    hsl(193deg 62% 48%) 17%,
+    hsl(194deg 75% 43%) 25%,
+    hsl(196deg 90% 38%) 33%,
+    hsl(198deg 97% 35%) 42%,
+    hsl(202deg 87% 35%) 50%,
+    hsl(205deg 100% 34%) 58%,
+    hsl(210deg 100% 36%) 67%,
+    hsl(214deg 100% 37%) 75%,
+    hsl(225deg 77% 41%) 83%,
+    hsl(248deg 60% 45%) 92%,
+    hsl(272deg 100% 34%) 100%
+  );
+}
 
+.img-container i {
+  position: absolute; 
+  top: 50%; 
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
 
 /* footer */
 .footer{
@@ -398,11 +422,15 @@
   padding: 12px;
 }
 .control-btn:hover {
-  /* color: #1db954;  */
+  color: #1db954; 
 }
 .shuffle-btn i,
-.repeat-btn i{
+.repeat-btn i,
+.repeat-btn img{
   font-size: 24px;
+  width: 24px;
+  height: 24px;
+  color: #fff;
 }
 .backward-btn i,
 .forward-btn i{
@@ -410,4 +438,74 @@
 }
 .play-pause-btn i{
   font-size: 56px;
+}
+
+/* MiniPlayer */
+.mini-player {
+  position: fixed;
+  bottom: 70px;
+  left: 0;
+  width: calc(100vw - 16px);
+  height: 56px;
+  background-color: #535353;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content:space-between;
+  padding: 8px;
+  margin: 0 8px;
+  border-radius: 16px;
+  border-radius: 6px;
+  z-index: 1;
+}
+.mini-player__btn {
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  width: 40px; 
+  height: 40px; 
+  padding: 8px; 
+  border-radius: 50%; 
+  cursor: pointer; 
+}
+.mini-player__btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.mini-player__btn i {
+  font-size: 24px; 
+}
+
+/* SongList */
+.SongList-container {
+  position: relative;
+  background-color: #212121;
+  padding: 20px;
+  border-radius: 8px;
+  margin: auto;
+  color:#e2e2e2;
+}
+.SongList-header h1 {
+  color:#d7d7d7;
+}
+.SongList-header p {
+  font-size: 14px;
+}
+.SongList-content{
+
+}
+.song-item {
+
+}
+.song-item:not(:last-child) {
+
+}
+.song-title {
+
+}
+.song-artist {
+
+}
+.song-duration {
+  font-size: 14px;
+  color: #888;
 }

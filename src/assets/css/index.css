@@ -24,17 +24,27 @@ select {
 .ant-drawer-content-wrapper {
   width: 430px !important; 
 }
-.ant-drawer-close{
+.ant-drawer .ant-drawer-header{
+  background-color: #121212;
+  padding: 36px !important;
+  height: 72px !important;
+  border-bottom:none;
+}
+.ant-drawer .ant-drawer-header-title svg{
+  width: 24px;
+  height: 24px;
+  color: #fff;
+}
+.ant-drawer .ant-drawer-close{
   position: absolute;
   right: 0;
   margin-inline-end: 22px;
-
-}
-.ant-drawer-header{
-  background-color: pink;
-  padding: 36px !important;
-  height: 72px !important;
 }
 .ant-drawer .ant-drawer-close {
-  margin-inline-end: none;
+  margin-inline-end: 20px;
+}
+.ant-drawer .ant-drawer-body{
+  padding: 0 40px;
+  color: #fff;
+  background-color: #121212;
 }

@@ -1,3 +1,4 @@
+import repeatOnce from '@/assets/images/icon/repeat_once.svg' 
 import { Slider } from 'antd';
 import { useState } from 'react';
 
@@ -8,7 +9,7 @@ const MusicPlayer = () => {
   const [ repeatState, setRepeatState ] = useState(0)
   // 上一首
   const [ isBackward, setBackward ] = useState(false)
-  // 是否播放 
+  // 是否為播放 
   const [ isPlayed, setIsisPlayed ] = useState(false)
   // 下一首
   const [ isForward, setForward ] = useState(false)
@@ -57,6 +58,7 @@ const MusicPlayer = () => {
           </div>
         </div>
       </div>
+      
       {/* 歌手歌名 */}
       <div className="albumDetails">
         <div className="flex-1 overflow-hidden">         
@@ -68,7 +70,6 @@ const MusicPlayer = () => {
             <i className="fa-regular fa-heart fa-xl opacity-20" ></i>
           ) : (
             <i className="fa-solid fa-heart fa-xl" style={{color:'#1db954'}}></i>
-            // <i class="fa-regular fa-heart fa-xl opacity-100"></i>
           )}
         </button>
       </div>
@@ -104,7 +105,7 @@ const MusicPlayer = () => {
               <i className="fa-solid fa-repeat opacity-100"></i>
             )}
             {repeatState === 2 && (
-              <i className="material-symbols-rounded opacity-100">repeat_one</i>
+              <img src={repeatOnce} className="repeatOnce-icon " alt="RepeatOnce"/>
           )}
         </button>
         {/* 上一首 */}

@@ -2,7 +2,8 @@ import { Outlet, useLocation } from 'react-router-dom'
 import Header from "./Header"
 import Footer from "./Footer"
 import SearchHeader from './SearchHeader';
-import PlaylistHeader from './PlayListHeader';
+import PlayListHeader from './PlayListHeader';
+import MiniPlayer from './MiniPlayer';
 
 const Layout = () => {
   const location = useLocation() 
@@ -11,13 +12,10 @@ const Layout = () => {
     if (location.pathname === '/search') {
       return <SearchHeader />
     }
-    if (location.pathname.startsWith('/playlist')) {
-      return <PlaylistHeader />
+    if (location.pathname === '/playlist'){
+      return <PlayListHeader />
     }
     if (location.pathname === '/search/recent'){
-      return null
-    }
-    if (location.pathname === '/playlist'){
       return null
     }
     return <Header />;
@@ -36,6 +34,7 @@ const Layout = () => {
       </main>
 
       {showFooter() && <Footer />}
+      <MiniPlayer/>
     </div>
   );
 };

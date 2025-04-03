@@ -2,7 +2,7 @@ import TabBar from "@/components/TabBar"
 
 
 
-const PlayList = () => {
+const PlayLists = () => {
   return (
     <div className="myPlaylist mt-[72px]">
     <div className="myBtnBox flex">
@@ -77,4 +77,4 @@ const PlayList = () => {
   )
 }
 
-export default PlayList
+export default PlayLists

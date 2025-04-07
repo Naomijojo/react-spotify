@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Slider } from 'antd';
 
 
-const MusicPlayer = () => {
+const Playing = () => {
   const [ isLike, setIsLike ] = useState(false)
   // 循環 不循環 循環一次 -> 點擊切換
   const [ repeatState, setRepeatState ] = useState(0)
@@ -42,7 +42,7 @@ const MusicPlayer = () => {
         <button className="button flex">
           <i className="fa-solid fa-xl fa-chevron-down"></i>
         </button>
-        <div className="encore-text font-bold"> Discovery</div>
+        <div className="encore-text font-bold">華語流行音樂合輯</div>
         <button className="button flex">
           <i className="fa-solid fa-ellipsis fa-lg"></i>  
         </button>
@@ -53,7 +53,7 @@ const MusicPlayer = () => {
         <div className="content01">
           <div className="content02">
             <div className="albumImgBox">
-              <img className="albumImg" src={"https://i.scdn.co/image/ab67616d00001e021dd61642554160edf78b0714"} alt="" />
+              <img className="albumImg" src="https://i.scdn.co/image/ab67616d00001e025d476803af73bdde7a8d3cef" alt="" />
             </div>
           </div>
         </div>
@@ -62,8 +62,8 @@ const MusicPlayer = () => {
       {/* 歌手歌名 */}
       <div className="albumDetails">
         <div className="flex-1 overflow-hidden">         
-          <div className="text-title text-xl">真的愛你</div>
-          <div className="text-subtitle opacity-70">Beyoud</div>
+          <div className="text-title text-xl">紅色高跟鞋</div>
+          <div className="text-subtitle opacity-70">蔡健雅</div>
         </div>
         <button role="switch" className="IconLikeBtn p-3 m-[-12px]" onClick={handleLike}>
           {isLike ? (
@@ -128,4 +128,4 @@ const MusicPlayer = () => {
   )
 }
 
-export default MusicPlayer
+export default Playing

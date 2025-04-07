@@ -5,5 +5,8 @@ import SearchRecent from './SearchRecent'
 import PlayLists from './PlayLists'
 import Premium from './Premium'
 import NotFound from './NotFound'
-
-export { Home, Search, SearchRecent, PlayLists, Premium, NotFound }
+import Recommend from './SongType/Recommend'
+import Playing from './Playing'
+import Login from './Login'
+ 
+export { Home, Search, SearchRecent, PlayLists, Premium, NotFound, Recommend, Playing, Login }

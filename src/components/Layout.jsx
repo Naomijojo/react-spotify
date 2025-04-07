@@ -4,6 +4,7 @@ import Footer from "./Footer"
 import SearchHeader from './SearchHeader';
 import PlayHeader from './PlayHeader';
 import MiniPlayer from './MiniPlayer';
+import TabBar from './TabBar';
 
 const Layout = () => {
   const location = useLocation() 
@@ -18,6 +19,13 @@ const Layout = () => {
     if (location.pathname === '/search/recent'){
       return null
     }
+    if (location.pathname.startsWith('/songType') ){
+      return null
+    }
+    if (location.pathname.startsWith('/playing') ){
+      return null
+    }
+
     return <Header />;
   }
   
@@ -33,8 +41,9 @@ const Layout = () => {
         <Outlet />
       </main>
 
-      {showFooter() && <Footer />}
-      <MiniPlayer/>
+      {showFooter() && <Footer/>}
+      {/* <MiniPlayer/> */}
+      <TabBar className="absolute bottom-0 left-0 w-full pl-0"/>
     </div>
   );
 };

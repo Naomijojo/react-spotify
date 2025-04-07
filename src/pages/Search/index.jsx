@@ -6,7 +6,7 @@ const Search = () => {
 
   
   return (
-    <div className="search-content">
+    <div className="search-content mb-[150px]">
       <h2 className="mt-5 mb-8">瀏覽全部</h2>
       <div className="cardSection-container">
         <div className="boxComponent relative flex min-h-[92px] p-3 rounded-[4px] overflow-hidden bg-slate-400">

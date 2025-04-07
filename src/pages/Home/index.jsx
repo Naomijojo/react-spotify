@@ -1,14 +1,15 @@
-// import MiniPlayer from "@/components/MiniPlayer"
-import TabBar from "@/components/TabBar"
 // import MusicPlayer from "@/components/MusicPlayer"
 // import HomeCard from "@/components/HomeCard"
 // import { useState, useEffect } from "react"
-// import { homeApi } from "@/api/home"
-// import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 
 const Home = () => {
+  const navigate = useNavigate()
 
+  const GoToPlaying = () => {
+    navigate(`/songType/recommend`)
+  }
   
   return (
     <div className="homePage-container flex flex-col flex-nowrap w-full ">
@@ -57,7 +58,7 @@ const Home = () => {
         </div>
       </div>
       {/* 你的熱門合輯 */}
-      <div className="homeSection">
+      <div className="homeSection" onClick={GoToPlaying}>
         <h3 className="homeSection-encoreTitle mt-6 mb-3">你的熱門合輯</h3>
         <div className="homeCard-container">
           <div className="homeCard">
@@ -316,8 +317,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      {/* <MiniPlayer className="" /> */}
-      <TabBar className="absolute bottom-0 left-0 w-full pl-0"/>
+      
     </div>
   )
 }

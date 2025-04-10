@@ -3,13 +3,15 @@ import { useEffect, useState } from "react"
 // import { myMusicApi } from "@/api/myMusic"
 import PlaylistCard from "@/components/PlaylistCard"
 import TabBar from "@/components/TabBar"
-
+import { useNavigate } from "react-router-dom"
   
 
 const PlayLists = () => {
   const [ isSortOpen, setSortIsOpen ] = useState(false)
   const [ selectedSortOptions, setSelectedSortOptions ] = useState(sortOptions[0].label)
   // const [ playlistData, setPlaylistData ] = useState([])
+
+  const navigate = useNavigate()
 
   const toggleDrawer = () => {
     setSortIsOpen(!isSortOpen)
@@ -65,6 +67,10 @@ const PlayLists = () => {
       "category": "artist" 
     }
   ]
+
+  const handleMoreArtist = () => {
+    navigate(`/playlist/moreArtist`)
+  }
   return (
     <div className="myPlaylist mt-[72px] mb-[150px]">
     <div className="myBtnBox flex mb-2">
@@ -156,19 +162,19 @@ const PlayLists = () => {
           <div className="text-subtitle text-sm text-gray-400">藝人</div>
         </div>
       </div> */}
-      <div className="playlistCard flex">
+      <div className="playlistCard flex" onClick={handleMoreArtist}>
         <div className="img-container mr-3 relative">
           <div className="w-[72px] h-[72px] rounded-full bg-[#282828]">
           <i className="fa-solid fa-plus fa-2xl" style={{color: '#959595'}}></i>
           </div>
         </div>
         <div className="text-container">
-          <div className="text-title text-xl font-semibold pt-5">新增藝人</div>
+          <div className="text-title text-xl font-semibold pt-5" >新增藝人</div>
         </div>
       </div>
       <div className="playlistCard flex">
         <div className="img-container mr-3 relative">
-          <div className="w-[72px] h-[72px] rounded-md bg-[#282828]">
+          <div className="w-[72px] h-[72px] rounded-md bg-[#282828]" >
           <i className="fa-solid fa-plus fa-2xl " style={{color: '#959595'}}></i>
           </div>
         </div>

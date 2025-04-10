@@ -8,10 +8,10 @@ const PlayHeader = () => {
         <img className='logo mr-3' src={LOGO} alt="LOGO" />
         <p className='title text-2xl font-bold'>你的音樂庫</p>
       </div>
-      <div className="add-box flex gap-5">
+      {/* <div className="add-box flex gap-5">
         <i className="fa-solid fa-xl fa-magnifying-glass"></i>
         <i className="fa-solid fa-xl fa-plus mr-1"></i>
-      </div>
+      </div> */}
       
     </header>
   )

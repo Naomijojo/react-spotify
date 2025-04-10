@@ -1,51 +1,58 @@
 import repeatOnce from '@/assets/images/icon/repeat_once.svg' 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Slider } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { useMusicStore } from '@/store/music';
 
 
 const Playing = () => {
-  const [ isLike, setIsLike ] = useState(false)
+  const navigate = useNavigate()
+  const audioRef = useRef(null)
+  const { currentTrack, isPlaying, favorites, togglePlaying, nextTrack, prevTrack, toggleFavorite } = useMusicStore()
+  
   // 循環 不循環 循環一次 -> 點擊切換
   const [ repeatState, setRepeatState ] = useState(0)
-  // 上一首
-  const [ isBackward, setBackward ] = useState(false)
-  // 是否為播放 
-  const [ isPlayed, setIsisPlayed ] = useState(false)
-  // 下一首
-  const [ isForward, setForward ] = useState(false)
   // 是否開啟隨機播放 
   const [ isShuffled, setShuffled] = useState(false)
-  
-  const handleLike = () => {
-    setIsLike((prevState) => !prevState)
-  }
+  const [ isBackward, setBackward ] = useState(false)
+  const [ isForward, setForward ] = useState(false)
   const handleRepeat = () => {
     setRepeatState((prevState) => (prevState + 1) % 3)
-  }
-  const handleBackward = () => {
-    setBackward((prevState) => !prevState )
-  } 
-  const handlePlay = () => {
-    setIsisPlayed((prevState) => !prevState)
-  }
-  const handleForward = () => {
-    setForward((prevState) => !prevState)
   }
   const handleShuffle = () => {
     setShuffled((prevState) => !prevState)
   }
   
+  
+  
+  const backToMini = () => {
+    navigate(`/songType/recommend`)
+   }
+
+
+  useEffect(() => {
+    const audio = audioRef.current //HTML元素的DOM節點->audioRef.current
+    console.log(audio)
+    // if (!audio) return          //如果 audioRef.current是null 直接退出函數不執行後續邏輯
+
+    if (isPlaying){
+      audio.play()
+    } else {
+      audio.pause()
+    }
+  }, [currentTrack, isPlaying])    // 換歌&播放狀態改變時重新執行 
+
 
   return (
     <div className="music-player">
       <div className="topArea mb-[40px]">
-        <button className="button flex">
+        <button className="button flex h-[40px]" onClick={backToMini}>
           <i className="fa-solid fa-xl fa-chevron-down"></i>
         </button>
-        <div className="encore-text font-bold">華語流行音樂合輯</div>
-        <button className="button flex">
-          <i className="fa-solid fa-ellipsis fa-lg"></i>  
-        </button>
+        {/* <div className="encore-text font-bold">華語流行音樂合輯</div> */}
+        {/* <button className="button flex">
+          <i className="fa-solid fa-ellipsis fa-lg" onClick={showDrawer}></i>  
+        </button> */}
       </div>
 
       {/* 專輯圖 */}
@@ -53,7 +60,7 @@ const Playing = () => {
         <div className="content01">
           <div className="content02">
             <div className="albumImgBox">
-              <img className="albumImg" src="https://i.scdn.co/image/ab67616d00001e025d476803af73bdde7a8d3cef" alt="" />
+              <img className="albumImg" src={currentTrack.album_image} alt="" />
             </div>
           </div>
         </div>
@@ -62,14 +69,14 @@ const Playing = () => {
       {/* 歌手歌名 */}
       <div className="albumDetails">
         <div className="flex-1 overflow-hidden">         
-          <div className="text-title text-xl">紅色高跟鞋</div>
-          <div className="text-subtitle opacity-70">蔡健雅</div>
+          <div className="text-title text-xl">{currentTrack.name}</div>
+          <div className="text-subtitle opacity-70">{currentTrack.artist_name}</div>
         </div>
-        <button role="switch" className="IconLikeBtn p-3 m-[-12px]" onClick={handleLike}>
-          {isLike ? (
-            <i className="fa-regular fa-heart fa-xl opacity-20" ></i>
-          ) : (
+        <button role="switch" className="IconLikeBtn p-3 m-[-12px]" onClick={() => toggleFavorite(currentTrack)}>
+          {favorites.some(item => item.id === currentTrack.id) ? (
             <i className="fa-solid fa-heart fa-xl" style={{color:'#1db954'}}></i>
+          ) : (
+            <i className="fa-regular fa-heart fa-xl opacity-20" ></i>
           )}
         </button>
       </div>
@@ -104,19 +111,23 @@ const Playing = () => {
           )}
         </button>
         {/* 上一首 */}
-        <button className="control-btn backward-btn" onClick={handleBackward}>
+        <button className="control-btn backward-btn" onClick={prevTrack}>
           <i className={`fa-solid fa-backward-step ${isBackward ? "opacity-100" : "opacity-20"}`}></i>
         </button>
         {/* 播放、暫停播放 */}
-        <button className="control-btn play-pause-btn" onClick={handlePlay}>
-        {isPlayed ? (
+        <button className="control-btn play-pause-btn" onClick={togglePlaying}>
+        <audio
+          ref={audioRef}
+          src={currentTrack.audio}
+        />
+        {isPlaying ? (
           <i className="fa-regular fa-circle-stop"></i>
           ) : (
           <i className="fa-solid fa-circle-play"></i>
         )}
         </button>
         {/* 下一首 */}
-        <button className="control-btn forward-btn" onClick={handleForward}>
+        <button className="control-btn forward-btn" onClick={nextTrack}>
           <i className={`fa-solid fa-forward-step ${isForward ? "opacity-100" : "opacity-20"}`}></i> 
         </button>
         {/* 隨機播放、不隨機播放 */}

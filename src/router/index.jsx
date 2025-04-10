@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "@/components/Layout";
-import { Home, Search, SearchRecent, PlayLists, Premium, NotFound, Recommend, Playing } from "@/pages";
+import { Home, Search, SearchRecent, PlayLists, Premium, NotFound, Recommend, Playing, Login, MoreArtist } from "@/pages";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +22,10 @@ const router = createBrowserRouter([
       {
         path:"/playlist",
         element: <PlayLists />
+      },
+      {
+        path:"/playlist/moreArtist",
+        element: <MoreArtist />
       },
       {
         path:"/songType/recommend",

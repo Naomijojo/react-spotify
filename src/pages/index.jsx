@@ -8,5 +8,6 @@ import NotFound from './NotFound'
 import Recommend from './SongType/Recommend'
 import Playing from './Playing'
 import Login from './Login'
- 
-export { Home, Search, SearchRecent, PlayLists, Premium, NotFound, Recommend, Playing, Login }
+import MoreArtist from './MoreArtist' 
+
+export { Home, Search, SearchRecent, PlayLists, Premium, NotFound, Recommend, Playing, Login, MoreArtist }

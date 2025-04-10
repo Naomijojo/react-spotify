@@ -3,7 +3,6 @@ import Header from "./Header"
 import Footer from "./Footer"
 import SearchHeader from './SearchHeader';
 import PlayHeader from './PlayHeader';
-import MiniPlayer from './MiniPlayer';
 import TabBar from './TabBar';
 
 const Layout = () => {
@@ -16,6 +15,9 @@ const Layout = () => {
     if (location.pathname === '/playlist'){
       return <PlayHeader />
     }
+    if (location.pathname === '/playlist/moreArtist'){
+      return <PlayHeader />
+    }
     if (location.pathname === '/search/recent'){
       return null
     }
@@ -25,6 +27,10 @@ const Layout = () => {
     if (location.pathname.startsWith('/playing') ){
       return null
     }
+    if (location.pathname.startsWith('/moreArtist') ){
+      return null
+    }
+    
 
     return <Header />;
   }

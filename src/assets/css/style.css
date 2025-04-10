@@ -48,7 +48,8 @@
   align-items: center;
   justify-content: center;
 }
-.recent-input-container input{
+.recent-input-container input,
+.moreArtist input{
   padding: 8px 40px;
   color: #000;
   border-radius: 6px;

@@ -100,8 +100,8 @@ const MoreArtist = () => {
   },[])
 
   return (
-    <div className='mt-[72px] moreArtist'>
-      <h1 className='font-bold text-4xl mt-8 mb-4'>再多選幾位你喜愛的藝人。</h1>
+    <div className='mt-5 moreArtist'>
+      <h1 className='font-bold text-4xl mb-5'>再多選幾位你喜愛的藝人。</h1>
       <div className="flex w-full relative mb-5">
         <i className="absolute top-[50%] left-3 fa-solid fa-magnifying-glass" style={{ color: "#000", transform: "translateY(-50%)" }}></i>
         <input type="search" placeholder={'keywords'} value={value} 

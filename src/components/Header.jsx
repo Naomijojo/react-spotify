@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 
 
 const Header = () => {
-  // const [ navigate ] = useNavigate
+  const navigate = useNavigate()
   const [ OpenDrawer, setOpenDrawer ] = useState(false)
   const showDrawer = () => {
     setOpenDrawer(true);
@@ -15,6 +15,11 @@ const Header = () => {
     setOpenDrawer(false);
   }
   
+
+  const handleLogin = () => {
+    closeDrawer()
+    navigate(`/login`)
+  }
   return (
     <header className="header-wrapper fixed flex justify-between items-center w-[100vw]" >
       <div className="logo-box">
@@ -32,7 +37,7 @@ const Header = () => {
         open={OpenDrawer} 
       >
       <div className="text-container flex flex-col justify-center items-start">
-        <button className='LoginBtn inline-flex gap-5 align-middle items-center py-2 w-[100%]' >
+        <button className='LoginBtn inline-flex gap-5 align-middle items-center py-2 w-[100%]'onClick={handleLogin} >
           <span className='text-[20px] font-bold' >登入</span>
           <i className="fa-solid fa-angle-right fa-xl" style={{color: '#ffffff'}}></i>
         </button>

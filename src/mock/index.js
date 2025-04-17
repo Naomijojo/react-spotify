@@ -1,5 +1,5 @@
 import Mock from "mockjs"; 
-import playlistData from './data/playlist.json';
+import searchItemData from './data/searchItem.json'
 
 
-Mock.mock('/mock/playlist', { code: 200, data: playlistData})
+Mock.mock('/mock/searchItem', { code: 200, data: searchItemData })

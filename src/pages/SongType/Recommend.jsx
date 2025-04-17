@@ -8,22 +8,24 @@ import { myMusicApi } from '@/api/myMusic';
 const Recommend = () => {
   const navigate = useNavigate()
   const audioRef = useRef(null)
-  const { currentTrack, isPlaying, togglePlaying } = useMusicStore()
-  // const [totalDuration, setTotalDuration] = useState(0)
+  const { currentTrack, isPlaying, togglePlaying} = useMusicStore()
 
-  
+
   const getAlbum = async () => {
-    const songs = await myMusicApi.getAlbum(currentTrack.artist_name)
-    console.log(songs) //要找到當前專輯下的歌曲才對 暫用artist_name運作
+    const data = await myMusicApi.getAlbum(currentTrack.artist_name)
+    console.log('當前專輯所有歌曲列表:', data)  
   }
-
-  
-
   
   useEffect(() => {
     getAlbum()
-  }, [])
+    // 查看當前播放歌曲
+    // console.log('Current Track:', currentTrack);
+
+    // 查看播放清單
+    // console.log('Track List:', trackList)
+  }, []) 
   
+
   useEffect(() => {
     const audio = audioRef.current // HTML元素的DOM節點->audioRef.current
     console.log(audio)
@@ -35,6 +37,14 @@ const Recommend = () => {
       audio.pause()
     }
   },[currentTrack, isPlaying])     // 換歌&播放狀態改變時重新執行
+
+  
+  const formatDuration = (duration) => {
+    const minutes = Math.floor(duration / 60);
+    const seconds = duration % 60;
+    return `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`
+  }
+
 
   const handlePlayer = () => {
     navigate(`/playing`)
@@ -55,11 +65,8 @@ const Recommend = () => {
           <p>專為你打造</p>
         </div>
         <div className="play-control flex justify-between items-center">
-          <p className='length'>3小時5分鐘</p>
-          {/* <p className='length'>{formatDuration(totalDuration)}</p> */}
-          {/* <button>
-            <i className="fa-solid fa-circle-play fa-2xl mr-2"></i>
-          </button> */}
+          <p className='length'>totalDuration:3小時5分鐘</p>
+
           <audio
             ref={audioRef}
             src={currentTrack.audio}
@@ -78,33 +85,13 @@ const Recommend = () => {
           <div className="flex justify-center items-center">
             <img className='w-14 h-14 mr-3' src={currentTrack.image} alt="" />
             <div className="flex flex-col ml-2">
-              <span className="song-title font-bold text-[18px]">song.id</span>
-              <span className="song-artist text-[12px]">song.artist_name</span>
+              <span className="song-title font-bold text-[18px]">{currentTrack.name}</span>
+              <span className="song-artist text-[12px]">{currentTrack.artist_name}</span>
             </div>
           </div>  
-          <span className="song-duration">duration</span> 
+          <span className="song-duration">{formatDuration(currentTrack.duration)}</span> 
         </div>
-
-        {/* <div className="song-item flex items-center justify-between mb-2">
-          <div className="flex justify-center items-center">
-            <img className='w-14 h-14 mr-3' src="https://i.scdn.co/image/ab67616d000048515e612ee6e4ad129abe910a53" alt="" />
-            <div className="flex flex-col ml-2">
-              <span className="song-title font-bold text-[18px]">戒菸</span>
-              <span className="song-artist text-[12px]">李榮浩</span>
-            </div>
-          </div>  
-          <span className="song-duration">5:06</span> 
-        </div>
-        <div className="song-item flex items-center justify-between mb-2">
-          <div className="flex justify-center items-center">
-            <img className='w-14 h-14 mr-3' src="https://i.scdn.co/image/ab67616d000048515e612ee6e4ad129abe910a53" alt="" />
-            <div className="flex flex-col ml-2">
-              <span className="song-title font-bold text-[18px]">戒菸</span>
-              <span className="song-artist text-[12px]">李榮浩</span>
-            </div>
-          </div>  
-          <span className="song-duration">5:06</span> 
-        </div> */}
+    
       </div>
       <MiniPlayer/>
     </div>

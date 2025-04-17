@@ -1,0 +1,144 @@
+[
+  {
+    "id": 1,
+    "image": "https://i.scdn.co/image/ab67fb8200005caf474a477debc822a3a45c5acb",
+    "title": "音樂",
+    "backgroundColor": "#dc148c",
+    "tag": "corporate" 
+  },
+  {
+    "id": 2,
+    "image": "https://i.scdn.co/image/ab6765630000ba8a81f07e1ead0317ee3c285bfa",
+    "title": "Podcast",
+    "backgroundColor": "#006450",
+    "tag": "chillout" 
+  },
+  {
+    "id": 3,
+    "image": "https://concerts.spotifycdn.com/images/live-events_category-image.jpg",
+    "title": "現場活動",
+    "backgroundColor": "#8400e7",
+    "tag": "ambient" 
+  },
+  {
+    "id": 4,
+    "image": "https://i.scdn.co/image/ab67fb8200005caf194fec0fdc197fb9e4fe8e64",
+    "title": "專為你打造",
+    "backgroundColor": "#1e3264",
+    "tag": "pop"
+  },
+  {
+    "id": 5,
+    "image": "https://i.scdn.co/image/ab67fb8200005caf66d545e6a69d0bfe8bd1e825",
+    "title": "最新發行",
+    "backgroundColor": "#608108",
+    "tag": "rock" 
+  },
+  {
+    "id": 6,
+    "image": "https://i.scdn.co/image/ab67fb8200005caf3f2b22b755cd318ee8e8b9fe",
+    "title": "華語流行",
+    "backgroundColor": "#1e3264",
+    "tag": "jazz" 
+  },
+  {
+    "id": 7,
+    "image": "https://i.scdn.co/image/ab67fb8200005caf5f3752b3234e724f9cd6056f",
+    "title": "嘻哈樂",
+    "backgroundColor": "#477d95",
+    "tag": "hiphop" 
+  },
+  {
+    "id": 8,
+    "image": "https://t.scdn.co/images/7262179db37c498480ef06bfacb60310.jpeg",
+    "title": "Podcast排行",
+    "backgroundColor": "#0d73ec",
+    "tag": "classical" 
+  },
+  {
+    "id": 9,
+    "image": "https://i.scdn.co/image/ab67fb8200005caf26ada793217994216c79dad8",
+    "title": "舞曲/電子樂",
+    "backgroundColor": "#477d95",
+    "tag": "country" 
+  },
+  {
+    "id": 10,
+    "image": "https://i.scdn.co/image/ab67fb8200005cafe542e9b59b1d2ae04b46b91c",
+    "title": "情調",
+    "backgroundColor": "#dc148c",
+    "tag": "edm" 
+  },
+  {
+    "id": 11,
+    "image": "https://t.scdn.co/images/d0fb2ab104dc4846bdc56d72b0b0d785.jpeg",
+    "title": "發掘更多",
+    "backgroundColor": "#8d67ab",
+    "tag": "reggae" 
+  },
+  {
+    "id": 12,
+    "image": "https://i.scdn.co/image/ab67fb8200005caf1cef0cee1e498abb8e74955f",
+    "title": "舒眠",
+    "backgroundColor": "#1e3264",
+    "tag": "blues" 
+  },
+  {
+    "id": 13,
+    "image": "https://i.scdn.co/image/ab67fb8200005caf330ca3a3bfaf8b18407fb33e",
+    "title": "弛放",
+    "backgroundColor": "#b06239",
+    "tag": "soul" 
+  },
+  {
+    "id": 14,
+    "image": "https://i.scdn.co/image/ab67fb8200005caf21c9a95a2702ce535fb07915",
+    "title": "情歌大全",
+    "backgroundColor": "#dc148c",
+    "tag": "r&b" 
+  },
+  {
+    "id": 15,
+    "image": "https://i.scdn.co/image/ab67fb8200005caf5b340bd0664da28003741733",
+    "title": "RADAR",
+    "backgroundColor": "#a56752",
+    "tag": "gospel" 
+  },
+  {
+    "id": 16,
+    "image": "https://i.scdn.co/image/ab67fb8200005caf2354ff5d02a9a0935beb94af",
+    "title": "EQUAL",
+    "backgroundColor": "#148a08",
+    "tag": "folk" 
+  },
+  {
+    "id": 17,
+    "image": "https://i.scdn.co/image/ab67fb8200005caf9bee89ba7d3ba26c5fd17390",
+    "title": "Netflix",
+    "backgroundColor": "#e61e32",
+    "tag": "funk" 
+  },
+  {
+    "id": 18,
+    "image": "https://i.scdn.co/image/ab67fb8200005caf8e97784ff1e12e67ae922715",
+    "title": "當紅",
+    "backgroundColor": "#b02897",
+    "tag": "disco" 
+  },
+  {
+    "id": 19,
+    "image": "https://i.scdn.co/image/ab67fb8200005caf6af6d83c78493644c9b0627b",
+    "title": "健身",
+    "backgroundColor": "#777777",
+    "tag": "bossa nova" 
+  },
+  {
+    "id": 20,
+    "image": "https://i.scdn.co/image/ab67fb8200005cafda4c849095796a9e5d2c4ddb",
+    "title": "搖滾樂",
+    "backgroundColor": "#006450",
+    "tag": "emo" 
+  }
+]
+
+  

@@ -9,5 +9,6 @@ import Recommend from './SongType/Recommend'
 import Playing from './Playing'
 import Login from './Login'
 import MoreArtist from './MoreArtist' 
+import Genre from './Genre'
 
-export { Home, Search, SearchRecent, PlayLists, Premium, NotFound, Recommend, Playing, Login, MoreArtist }
+export { Home, Search, SearchRecent, PlayLists, Premium, NotFound, Recommend, Playing, Login, MoreArtist, Genre }

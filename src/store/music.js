@@ -4,16 +4,22 @@ import { persist } from 'zustand/middleware'; //允許將狀態存儲到瀏覽�
 export const useMusicStore = create(
   persist(
     (set, get) => ({
-        // 儲存狀態
-        // recommendTrack:[],
-        // weekTracks: [],
-        // 待播放歌曲清單(陣列)、當前播放歌曲、播放歌曲的索引、播放狀態(布林)
-        trackList: [],
-        currentTrack: null,
-        currentIndex: 0,
-        isPlaying: false,
+        // 1.先儲存現有狀態
+        
+        // 三種播放模式 : 依序(預設)、隨機、重複
+        playMode: 'sequential', //sequential,random,repeat
+        trackList: [],          //待播放歌曲清單
+        currentTrack: null,     //當前播放歌曲(未選擇歌曲)
+        currentIndex: 0,        //當前播放歌曲索引
+        progress: 0,            //播放進度
+        duration: 0,            //歌曲總長度
+        isPlaying: false,       //是否正在播放
+        favorites: [],          //收藏歌曲
+
+
+        setPlayMode: (mode) => set({ playMode: mode }),
+        updateProgress: (progress, duration) => set({ progress, duration }),
         togglePlaying: () => set((state) => ({ isPlaying: !state.isPlaying })),  // 增加state取得全部狀態 並用!isPlaying控制是否播放
-        favorites: [],
         toggleFavorite: (track) => {
           // 查看當前歌曲是復否已收藏：some遍歷favorites陣列 
           const hasFavorite = get().favorites.some(item => item.id === track.id)
@@ -27,12 +33,13 @@ export const useMusicStore = create(
           }
         },
 
-        // 切換播放清單
+        // 2.切換播放清單
         setTrackList: (trackList) => set({ trackList }),
         // 切換歌曲時(更新狀態)
         playTrack: (index) => {
           const tracks = get().trackList // 從trackList中取得所有歌曲
           const track = tracks[index]    // 根據索引找到要播放的歌曲
+
           // 待播歌曲+播放狀態
           set({
             currentTrack: track,         // 更新 currentTrack 為這首歌
@@ -40,6 +47,7 @@ export const useMusicStore = create(
             isPlaying: true,             // 正在播放
           })
         },
+        
         // 新增專輯清單到播放器
         setAlbumTracks: (albumTracks) => {
           set({
@@ -50,19 +58,30 @@ export const useMusicStore = create(
             favorite: false,
           })
         },
-        // 新增上下首切換
+        // 下一首切換 
         nextTrack: () => {
-          const { trackList, currentIndex } = get()
-          const nextIndex = (currentIndex + 1) % trackList.length
+          const { trackList, currentIndex, playMode } = get()
+          let nextIndex
+          if (playMode === 'random') {
+            nextIndex = Math.floor(Math.random() * trackList.length)  // 隨機:Math.random()*trackList的10首歌曲 印出隨機的1-9
+          } else {
+            nextIndex = (currentIndex + 1) % trackList.length
+          }
           set({
             currentTrack: trackList[nextIndex],
             currentIndex: nextIndex,
             isPlaying: true
           })
         },
+        // 上一首切換 
         prevTrack: () => {
-          const { trackList, currentIndex } = get()
-          const prevIndex = (currentIndex - 1 + trackList.length) % trackList.length
+          const { trackList, currentIndex, playMode } = get()
+          let prevIndex
+          if (playMode === 'random'){
+            prevIndex = Math.floor(Math.random() * trackList.length)
+          } else {
+            prevIndex = (currentIndex - 1 + trackList.length) % trackList.length
+          }
           set({
             currentTrack: trackList[prevIndex],
             currentIndex: prevIndex,
@@ -71,7 +90,14 @@ export const useMusicStore = create(
          }
       }), 
       { 
-        name: 'music' 
+        name: 'music',
+        // 持久化儲存
+        partialize: (state) => ({
+          favorites: state.favorites,
+          currentTrack: state.currentTrack,
+          currentIndex: state.currentIndex,
+          trackList: state.trackList
+        })
       }
   )
 )

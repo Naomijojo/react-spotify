@@ -7,6 +7,7 @@ import TabBar from './TabBar';
 
 const Layout = () => {
   const location = useLocation() 
+  const noMainRoutes = ['/login'] 
 
   const getHeader = () => {
     if (location.pathname === '/search') {
@@ -15,8 +16,8 @@ const Layout = () => {
     if (location.pathname === '/playlist'){
       return <PlayHeader />
     }
-    if (location.pathname === '/playlist/moreArtist'){
-      return <PlayHeader />
+    if (location.pathname.startsWith('/playlist/moreArtist') ){
+      return null
     }
     if (location.pathname === '/search/recent'){
       return null
@@ -30,7 +31,15 @@ const Layout = () => {
     if (location.pathname.startsWith('/moreArtist') ){
       return null
     }
-    
+    if (location.pathname.startsWith('/login') ){
+      return null
+    }
+    if (location.pathname.startsWith('/premium') ){
+      return null
+    }
+    if (location.pathname.startsWith('/genre') ){
+      return null
+    }
 
     return <Header />;
   }
@@ -43,9 +52,13 @@ const Layout = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {getHeader()}
-      <main className='flex-1 content-container'>
-        <Outlet />
-      </main>
+      
+      {!noMainRoutes.includes(location.pathname) && (
+        <main className='flex-1 content-container'>
+          <Outlet />
+        </main>
+      )}
+      {noMainRoutes.includes(location.pathname) && <Outlet />}
 
       {showFooter() && <Footer/>}
       {/* <MiniPlayer/> */}

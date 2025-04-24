@@ -6,6 +6,7 @@ import { useMusicStore } from '@/store/music';
 
 const Playing = () => {
   const navigate = useNavigate()
+  
   const audioRef = useRef(null)
   const { currentTrack,
     isPlaying,
@@ -87,28 +88,28 @@ const Playing = () => {
   }
 
 
-  const backToMini = () => {
+  const handleMini = () => {
     navigate(`/songType/recommend`)
   }
+
+  if(!currentTrack?.id) return <div>目前沒有撥放歌曲</div>
 
   return (
     <div className="music-player">
       <div className="topArea mb-[40px]">
-        <button className="button flex h-[40px]" onClick={backToMini}>
+        <button className="button flex h-[40px]" onClick={handleMini}>
           <i className="fa-solid fa-xl fa-chevron-down"></i>
         </button>
         {/* <div className="encore-text font-bold">華語流行音樂合輯</div> */}
       </div>
 
       {/* 專輯圖 */}
-      <div className="albumArea flex flex-col flex-1 mb-6">
-        <div className="content01">
-          <div className="content02">
-            <div className="albumImgBox">
-              <img className="albumImg" src={currentTrack.album_image} alt="" />
-            </div>
+      <div className="albumArea flex flex-col flex-1 mt-12 mb-20">
+        {/* <div className="content01"> */}
+          <div className="albumImgBox">
+            <img className="albumImg" src={currentTrack.album_image} alt="" />
           </div>
-        </div>
+        {/* </div> */}
       </div>
 
       {/* 歌手歌名 */}

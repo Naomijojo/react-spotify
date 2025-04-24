@@ -54,7 +54,7 @@ const Layout = () => {
       {getHeader()}
       
       {!noMainRoutes.includes(location.pathname) && (
-        <main className='flex-1 content-container'>
+        <main className='flex-1 content-container' >
           <Outlet />
         </main>
       )}

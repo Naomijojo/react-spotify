@@ -95,19 +95,21 @@ export const myMusicApi = {
           artist_name: artistName,
           limit
         },
-      });
-      return response.data.results;
+      })
+      return response.data.results
     } catch (error) {
-      console.error('獲取專輯歌曲時錯誤:', error);
+      console.error('獲取專輯歌曲時錯誤:', error)
     }
   },
-  getThemeTracks: async(tag, limit = 10) => {
-    const { data } = await axios.get('https://api.jamendo.com/v3.0/artists/musicinfo', {
+  getThemeTracks: async( tag, order = 'popularity_week', limit = 10) => {
+    const { data } = await axios.get('https://api.jamendo.com/v3.0/tracks', {
       params: {
         client_id: import.meta.env.VITE_CLIENT_ID,
         format: 'json',
-        tag,
-        limit
+        tags: tag,
+        limit,
+        include: 'musicinfo+stats',
+        order,
     }
   })
     return data.results

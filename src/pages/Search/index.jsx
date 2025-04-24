@@ -12,21 +12,21 @@ const Search = () => {
   const [ themeTracks, setThemeTracks ] = useState([])
 
   
-  //管理主題音樂
+  // 管理主題音樂
   useEffect(() => {
     const fetchThemeTracks = async () => {
       try {
         const results = await Promise.all(
           searchItems.map(item => myMusicApi.getThemeTracks(item.tag))
         )
-        console.log('獲取主題音樂:', results); 
+        console.log('獲取主題音樂:', results)
         setThemeTracks(results)
       } catch (err) {
-        console.error('獲取主題音樂錯:', err);
+        console.error('獲取主題音樂錯:', err)
       }
-    };
+    }
 
-    fetchThemeTracks();
+    fetchThemeTracks(themeTracks)
   }, []);
 
 
@@ -71,7 +71,6 @@ const Search = () => {
         ))}
       </div>
       
-      <TabBar/>
     </div>
   )
 }

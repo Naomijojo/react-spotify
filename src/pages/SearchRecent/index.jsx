@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom"
 import { myMusicApi } from "@/api/myMusic"
 import { useState, useEffect } from "react"
 import { useMusicStore } from "@/store/music"
-
+import { Dropdown, Menu } from "antd"
+import Loading from "@/components/Loading"
 
 const SearchRecent = () => {
   const navigate = useNavigate()
@@ -13,12 +14,21 @@ const SearchRecent = () => {
   const [ searchQuery, setSearchQuery ] = useState('')          //搜尋的關鍵字
   const [ searchHistory, setSearchHistory ] = useState([])      //搜尋歷史紀錄
   // const searchRef = useRef(null)                            // 這個用來獲取input的值
+  const [loading, setLoading] = useState(false)
+
 
   useEffect(() => async () => {
     const getResults = async () => {
-      const data = await myMusicApi.getTracks(40)
-      console.log('從recommendedTracks api篩選出來的歌有:', data)
-      setSearchResults(data.recommendedTracks)
+      setLoading(true)     // 開始加載
+      try {
+        const data = await myMusicApi.getTracks(40)
+        console.log('從getTracks api篩選出來的歌有:', data)
+        setSearchResults(data.recommendedTracks)
+      } catch (error) {
+        console.error('獲取歌曲時錯誤:', error)
+      } finally {
+        setLoading(false)  // 結束加載
+      }
     }
     getResults()
   },[])
@@ -38,20 +48,22 @@ const SearchRecent = () => {
     setSearchQuery('')
   }
 
-  const backToSearch = () => {
+  const backToSearchPage = () => {
     navigate('/search')
   }
-  const handleSearch = (keyword) => {
-    const filteredData = searchResults.filter(item => item.title.includes(keyword))
-    setFilteredResults(filteredData)
-  }
+  // const handleSearch = (keyword) => {
+  //   const filteredData = searchResults.filter(item => item.title.includes(keyword))
+  //   setFilteredResults(filteredData)
+  // }
   // 80 搜尋歷史紀錄->待完成中...  
 
+
+  if(loading) return <Loading />
   return (
     <div className="flex flex-col h-full">
       <div className="recent-input-container flex items-center p-3">
-        <button className="btn-box" onClick={handleSearch}>
-          <i className="fa-solid fa-arrow-left fa-lg" onClick={backToSearch} ></i>
+        <button className="btn-box" >
+          <i className="fa-solid fa-arrow-left fa-lg" onClick={backToSearchPage} ></i>
         </button>
         <div className="flex w-full relative ml-2">
           <i className="absolute top-[50%] left-3 fa-solid fa-magnifying-glass" style={{ color: "#000", transform: "translateY(-50%)" }}></i>
@@ -74,7 +86,7 @@ const SearchRecent = () => {
       <div className="flex flex-col flex-1 gap-4 mt-6"> 
         <h1 className="title">想播什麼就播什麼</h1>
 
-        {/* 搜尋後內容 */}
+        {/* 搜尋後的歌 */}
         <div className="search-result-container flex flex-col gap-4">
           {filteredResults.map((item) => (
             <MusicResult key={item.id} image={item.album_image} title={item.name} />
@@ -82,18 +94,17 @@ const SearchRecent = () => {
         </div>
 
         {/* 搜尋歷史紀錄 */}
-        <div className="search-history-container">
+        {/* <div className="search-history-container">
           <h1 className="title">搜尋歷史紀錄</h1>
           <div className="flex flex-col gap-4 mt-4">
             {searchHistory.map((item) => (
               <MusicResult key={item.id} image={item.album_image} title={item.name} />
             ))}
           </div>
-        </div>
+        </div> */}
 
       </div>
 
-      <TabBar />
     </div>
   )
 }

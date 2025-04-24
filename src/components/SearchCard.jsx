@@ -9,8 +9,8 @@ const SearchCard = ({ title, image, backgroundColor, tag }) => {
 
   const item = searchItems.find(item => item.tag === tag)
   // console.log(searchItems)
-
   if (!item) return null
+
   if(!tag){
     return <div>沒有tag....</div>
   }

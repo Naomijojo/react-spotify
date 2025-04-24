@@ -1,7 +1,58 @@
 import LOGO from '@/assets/images/icon/logo.svg'
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { message } from 'antd'
+import { userApi } from '@/api/user'
+import { useUserStore } from '@/store/user'
+
+
 
 const Login = () => {
+  const { Token, setToken, userInfo, setUserInfo } = useUserStore()
+  const [ username, setUserName ] = useState('')
+  const [ password, setPassword ] = useState('')
+  const [ email, setEmail ] = useState('')
+  
+  // 如何登入？
+  // 輸入信箱或使用者名稱 -> 資訊傳給登入API -> 後端確認資料庫事是否有該使用者 -> 回傳token給前端 -> 前端儲存token到localStorage -> 是否為登入狀態？就看本地有無token
+  const login = async () => {
+    // 防呆警示
+    if (!username || !password || !email) {
+      message.warning('請輸入使用者名稱、密碼和電子信箱')
+      return
+    }
+    try {
+      // 取回token
+      const { accessToken, firstName } = await userApi.login(username, password)
+      console.log('AccessToken:', accessToken)
+
+      // 存入token userInfo到localStorage
+      setToken(accessToken)
+      setUserInfo({ firstName })
+
+      // 通知登入成功
+      message.success('登入成功')
+    } catch (err) {
+      // 通知登入錯誤
+      message.error('登入失敗，請檢查您的使用者名稱、密碼和電子信箱')
+      console.error(err)
+    }
+  }
+
+
+  // const logout = () => {
+    // setToken('')
+    // setUserInfo({})    
+    // 通知登出成功
+    // message.success('已登出成功')
+  // } 
+ 
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      login()
+    }
+  }
+
   return (
     <div className="flex-1 login-bg">
       <div class="login-container p-12 flex flex-col gap-[10px] justify-center items-center">
@@ -31,12 +82,22 @@ const Login = () => {
         <div class="login-form">
           <div className="Group pb-4">
             <div className="labelGroup flex flex-col items-center">
-              <label className='mail-label mt-5 mb-2 text-[13px]' for="login-username">電子信箱或使用者名稱</label>
-              <input className='mail-input p-3 text-white ' type="text" placeholder='電子信箱或使用者名稱' />
+              <label className='mail-label mt-5 mb-2 text-[13px]' for="login-username">電子信箱</label>
+              <input 
+              type= "email" 
+              value= {email}
+              onChange={(e) => setEmail(e.target.value)}
+
+              onKeyDown={handleKeyDown}
+
+              className='mail-input p-3 text-white ' 
+              placeholder='輸入電子信箱'
+
+               />
             </div>
           </div>
         </div>
-        <button class="login-Button continue-Button mb-8">
+        <button class="login-Button continue-Button mb-8" onClick={login}>
           <span className='continue-btn flex text-black font-bold'>繼續</span>  
         </button>
         <div className="signup-section flex flex-col items-center">
@@ -44,7 +105,6 @@ const Login = () => {
           <Link className='text-center'>註冊 Spotify.</Link>
         </div>
       </div>
-
     </div>
 
   )

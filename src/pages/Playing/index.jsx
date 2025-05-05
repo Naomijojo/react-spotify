@@ -1,4 +1,4 @@
-import {  useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Slider } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useMusicStore } from '@/store/music';
@@ -23,35 +23,49 @@ const Playing = () => {
   } = useMusicStore()
   
   
-  // 時間控制 -> 再用useEffect偵測 -> 放進全局控制
-  const handleTimeChange = () => {
+  // * 時間控制 -> 再用useEffect偵測 -> 放進全局控制
+  const handleTimeChange = useCallback(() => {
+    // 防呆機制 -> 如果 audioRef.current是null 直接退出函數不執行後續邏輯
+    const audio = audioRef.current
+    if (!audio) return                 
+
+    // console.log('Time',audio.currentTime)   // 印出查看：HTMLAudioElement >> currentTime=取得、設定當前播放秒數(sec)
+    // console.log('duration',audio.duration)  // 印出查看：歌曲總時長
+    
     // progress 及 duration 的更新
-    console.log('Time',audioRef.current.currentTime)  //HTMLAudioElement >> currentTime=取得、設定當前播放秒數(sec)
-    console.log('duration',audioRef.current.duration)  //歌曲總時長
-    updateProgress(audioRef.current.currentTime, audioRef.current.duration )
+    updateProgress(audio.currentTime, audio.duration )
+  },[updateProgress])                       // 依賴 updateProgress 函式，當 updateProgress 改變時重新執行，依賴項未改變時不會重新創建，提升效能
+
+
+  // * 進度條拖動控制
+  const handleProgressChange = (value) => {
+    // 防呆機制 -> 如果 audioRef.current是null 直接退出函數不執行後續邏輯
+    const audio = audioRef.current
+    if (!audio) return
+    if (audio){
+      audioRef.current.currentTime = value
+      updateProgress(value, audio.duration)
+    }
   }
-  // 進度條控制
-  const handleProgressChang = (value) => {
-    audioRef.current.currentTime = value
-    updateProgress(audioRef.current.currentTime, audioRef.current.duration)
-  }
 
-
-
-  // 更新進度[(加入監聽 -> 頁面更新時=組件卸載 就要移除監聽(避免記憶體洩漏) 不要遺留沒使用的變數或函數]
+  // * 更新進度[(加入監聽 -> 頁面更新時=組件卸載 就要移除監聽(避免記憶體洩漏) 不要遺留沒使用的變數或函數]
   useEffect(() => {
     const audio = audioRef.current
     audio.addEventListener('timeupdate', handleTimeChange)
     return () => {
       audio.removeEventListener('timeupdate', handleTimeChange)
     }
-  })
+  },[]) //加上空陣列 []，表示只在第一次 mount 時綁一次
   
-  // 播放結束時 
+
+  
+  // *播放結束時 
   // 先確認handleEnded內的函式(確認播放模式是循環還是重複 如果是重複 會把currentTime歸零再播放)
-  // 如果是依序或隨機 就使用nextTrack的方法
+  // 如果是依序或隨機 就使用nextTrack方法
   useEffect(() => {
     const audio = audioRef.current
+    if (!audio) return
+
     const handleEnded = () => {
       if(playMode === 'repeat'){
         audio.currentTime = 0
@@ -72,15 +86,18 @@ const Playing = () => {
     const audio = audioRef.current // HTML元素的DOM節點->audioRef.current
     console.log(audio)
 
-    if (isPlaying){
-      audio.play()
+    if (isPlaying) {
+      audio.play().catch((error) => { //對 audioRef.current 的存在性檢查，並使用 async 函數處理 play() 方法的返回值，以處理可能的 Promise
+        console.error('播放失敗:', error)
+      })
     } else {
       audio.pause()
     }
-  }, [currentTrack, isPlaying])    // 換歌&播放狀態改變時重新執行 
+  }, [currentTrack, isPlaying])    // 換歌 & 播放狀態改變時重新執行 
 
- // currentTime原本為秒數 需要進行格式化
-  const formateTime = (seconds) => {
+
+ // currentTime原本為秒數 需要 Math.floor 進行格式化
+  const formatTime = (seconds) => {
     if (!seconds) return '0:00'
     const minutes = Math.floor(seconds / 60) // Math.floor無條件捨去，回傳「小於等於」所給數字的最大整數 => 向下取整數
     const secs = Math.floor(seconds % 60)
@@ -95,8 +112,13 @@ const Playing = () => {
   if(!currentTrack?.id) return <div>目前沒有撥放歌曲</div>
 
   return (
-    <div className="music-player">
-      <div className="topArea mb-[40px]">
+    <>
+      <audio
+        ref={audioRef}
+        src={currentTrack.audio}
+      />
+      <div className="music-player">
+      <div className="topArea">
         <button className="button flex h-[40px]" onClick={handleMini}>
           <i className="fa-solid fa-xl fa-chevron-down"></i>
         </button>
@@ -104,12 +126,10 @@ const Playing = () => {
       </div>
 
       {/* 專輯圖 */}
-      <div className="albumArea flex flex-col flex-1 mt-12 mb-20">
-        {/* <div className="content01"> */}
-          <div className="albumImgBox">
-            <img className="albumImg" src={currentTrack.album_image} alt="" />
-          </div>
-        {/* </div> */}
+      <div className="albumArea flex flex-col flex-1 mt-12 mb-12">
+        <div className="albumImgBox">
+          <img className="albumImg" src={currentTrack.album_image} alt="" />
+        </div>
       </div>
 
       {/* 歌手歌名 */}
@@ -135,25 +155,22 @@ const Playing = () => {
             className="progress-bar-slider"
             tooltip={{ open: false }} 
 
-            onChange={(value) => handleProgressChang(value)}
+            onChange={(value) => handleProgressChange(value)}
             value={progress|| 0} // 歌曲進度 預設0
             max={duration || 0}   // 歌曲總時長 預設0
           />
           <div className="time-bar opacity-20">
-            <span className="current-time text-[11px]">{formateTime(progress)}</span>
-            <span className="total-time text-[11px]">{formateTime(duration)}</span>
+            <span className="current-time text-[11px]">{formatTime(progress)}</span>
+            <span className="total-time text-[11px]">{formatTime(duration)}</span>
           </div>
         </div>
       </div>
 
       {/* 播放案鈕控制區  */}
       <div className="controls-bar mb-4">
-        {/*playMode是否為repeat(重複) 如果是:把模式為sequential(預設的依序)關掉 如果否:模式就是repeat(重複) */}
+        {/* playMode是否為repeat(重複) 如果是:把模式為sequential(預設的依序)關掉 如果否:模式就是repeat(重複) */}
         <button className="control-btn repeat-btn" onClick={() => setPlayMode(playMode === 'repeat' ? 'sequential' : 'repeat')}>
           <i className={`fa-solid fa-repeat ${playMode === 'repeat' ? "opacity-100" : "opacity-20"}`}></i>
-
-          {/* {playMode === 'repeat' ?  <i className="fa-solid fa-repeat opacity-100"></i> : <i className="fa-solid fa-repeat opacity-20"></i>} */}
-          
         </button>
         {/* 上一首 */}
         <button className="control-btn backward-btn" onClick={prevTrack}>
@@ -161,10 +178,7 @@ const Playing = () => {
         </button>
         {/* 播放、暫停播放 */}
         <button className="control-btn play-pause-btn" onClick={togglePlaying}>
-        <audio
-          ref={audioRef}
-          src={currentTrack.audio}
-        />
+        
         {isPlaying ? (
           <i className="fa-regular fa-circle-stop"></i>
           ) : (
@@ -181,6 +195,8 @@ const Playing = () => {
         </button>
       </div>
     </div>
+    </>
+    
   )
 }
 

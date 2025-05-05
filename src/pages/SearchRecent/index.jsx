@@ -1,21 +1,21 @@
-import TabBar from "@/components/TabBar"
+import MiniPlayer from "@/components/MiniPlayer"
 import MusicResult from "@/components/MusicResult"
 import { useNavigate } from "react-router-dom"
 import { myMusicApi } from "@/api/myMusic"
 import { useState, useEffect } from "react"
 import { useMusicStore } from "@/store/music"
-import { Dropdown, Menu } from "antd"
+// import { Dropdown, Menu } from "antd"
 import Loading from "@/components/Loading"
 
 const SearchRecent = () => {
   const navigate = useNavigate()
-  const [ searchResults, setSearchResults ] = useState([])      //從api獲取的資料
-  const [ filteredResults, setFilteredResults ] = useState([])  //filter以首字母為篩選條件的資料
-  const [ searchQuery, setSearchQuery ] = useState('')          //搜尋的關鍵字
-  const [ searchHistory, setSearchHistory ] = useState([])      //搜尋歷史紀錄
-  // const searchRef = useRef(null)                            // 這個用來獲取input的值
-  const [loading, setLoading] = useState(false)
-
+  const [ searchResults, setSearchResults ] = useState([])      // 從api獲取的資料
+  const [ filteredResults, setFilteredResults ] = useState([])  // filter以首字母為篩選條件的資料
+  const [ searchQuery, setSearchQuery ] = useState('')          // 搜尋的關鍵字
+  // const [ searchHistory, setSearchHistory ] = useState([])   // 搜尋歷史紀錄
+  // const searchRef = useRef(null)                             // 這個用來獲取input的值
+  const [ loading, setLoading ] = useState(false)
+  const { setTrackList, playTrack } = useMusicStore()           // 從播放列表並播放選中的歌曲
 
   useEffect(() => async () => {
     const getResults = async () => {
@@ -51,6 +51,14 @@ const SearchRecent = () => {
   const backToSearchPage = () => {
     navigate('/search')
   }
+
+  const handlePlay = (track, index) => {
+    setTrackList(filteredResults); // 設置當前的播放列表
+    playTrack(index);              // 播放選中的歌曲
+  }
+  
+
+
   // const handleSearch = (keyword) => {
   //   const filteredData = searchResults.filter(item => item.title.includes(keyword))
   //   setFilteredResults(filteredData)
@@ -84,14 +92,25 @@ const SearchRecent = () => {
       </div>
 
       <div className="flex flex-col flex-1 gap-4 mt-6"> 
-        <h1 className="title">想播什麼就播什麼</h1>
-
-        {/* 搜尋後的歌 */}
-        <div className="search-result-container flex flex-col gap-4">
-          {filteredResults.map((item) => (
-            <MusicResult key={item.id} image={item.album_image} title={item.name} />
-          ))}
-        </div>
+        {filteredResults.length > 0 ? (
+          <>
+            <h1 className="title">想播什麼就播什麼</h1>
+            {/* 搜尋後的歌 */}
+            <div className="search-result-container flex flex-col gap-4">
+              {filteredResults.map((item, index) => (
+                <MusicResult 
+                  key={index} 
+                  image={item.album_image} 
+                  title={item.name} 
+                  onClick={() => {handlePlay(item, index) }  
+                  }
+                />
+              ))}
+            </div>
+          </>
+        ) :(
+          <h1 className="title">目前沒有你想要的歌曲</h1>
+        ) }
 
         {/* 搜尋歷史紀錄 */}
         {/* <div className="search-history-container">
@@ -104,7 +123,7 @@ const SearchRecent = () => {
         </div> */}
 
       </div>
-
+      <MiniPlayer />
     </div>
   )
 }

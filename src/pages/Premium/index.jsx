@@ -1,11 +1,10 @@
-import TabBar from "@/components/TabBar"
 import LOGO from "@/assets/images/icon/logo.svg"
 import { Divider } from 'antd'
 
 
 const Premium = () => {
   return (
-    <div className="flex-1 mt-[100px] ">
+    <div className="flex-1 mt-[100px] mb-[100px]">
       <div className="flex flex-col justify-center items-start gap-6">
         <div className="header flex w-full py-2">
           <img className="mr-2" src={LOGO} alt="" />
@@ -50,7 +49,6 @@ const Premium = () => {
         
         <div className="premium-item border border-solid rounded-md p-3 flex flex-col gap-3 w-full relative" style={{ backgroundColor: '#43434380' }}>
           <h2 className="item-title text-[20px] font-bold p-2" style={{color:'#ffc856'}}>Duo</h2>
-          {/* <div className="border-b-2"></div> */}
           <Divider className="m-0" style={{ backgroundColor: '#4f4f4f', height: '2px' }}/>
           <ul class="benefits-list text-[18px]">
             <li>2個Premium帳戶</li>

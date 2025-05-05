@@ -1,6 +1,8 @@
-const MusicResult = ({image, title}) => {
+
+
+const MusicResult = ({image, title, onClick }) => {
   return (
-    <div className="music-item flex justify-start items-center">
+    <div className="music-item flex justify-start items-center" onClick={onClick}>
       <div className="music-img w-[50px] h-[50px] mr-3 ">
         <img src={image} alt={title} className="rounded-md"/>
       </div>

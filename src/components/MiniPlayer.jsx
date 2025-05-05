@@ -1,29 +1,32 @@
 import { useNavigate } from "react-router-dom"
-import { useState } from "react"
 import { Slider } from "antd"
+  import { useRef } from "react"
 import { useMusicStore } from "@/store/music"
-
 
 const MiniPlayer = () => {
   const navigate = useNavigate()
-  const { currentTrack, isPlaying, togglePlaying, favorites, toggleFavorite } = useMusicStore()
-  const [ isLike, setIsLike ] = useState(false)
-
-  // const [ progress, setProgress ] = useState(0)
-
-  const handleLike = () => {
-    setIsLike((prevState) => !prevState)
-  } 
-  // const handlePause = () => {
-  //   setPaused((prevState) => !prevState) 
-  // }
-
+    const audioRef = useRef(null)
+  const { 
+    currentTrack,
+    isPlaying,
+    togglePlaying, 
+    favorites, 
+    toggleFavorite,
+    progress,
+    duration,
+  } = useMusicStore()
+  
+  
   const GoToDefaultPlaying = () => {
     navigate(`/playing`)
   }
 
+  if ( !currentTrack) return null
+
+
   return (
     <div className="mini-player">
+
       <div className="mini-player__img flex items-center justify-center" onClick={GoToDefaultPlaying}>
         <img className="mini-player__cover rounded-[4px] w-[40px] h-[40px]" src={currentTrack.album_image} alt="" />
         <div className="mini-player__info ml-2 flex flex-col">
@@ -49,9 +52,18 @@ const MiniPlayer = () => {
       </div>
       <div className="mini-player_slider ant-slider w-[100%] absolute bottom-[-5px] left-0 ">
         <Slider
+          value={progress}
           tooltip={{ open: false }} 
+          max={duration || 0}   // 歌曲總時長 預設0
         />
       </div>
+
+      <audio
+        ref={audioRef}
+        src={currentTrack?.audio} 
+        hidden
+      />
+
     </div>
   )
 }

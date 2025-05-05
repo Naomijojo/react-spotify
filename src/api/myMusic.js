@@ -46,7 +46,7 @@ export const myMusicApi = {
           client_id: import.meta.env.VITE_CLIENT_ID,
           format: 'json',
           limit,
-          search: 'funky',
+          search: 'pop',
           include: 'musicinfo+stats',
           audioformat: 'mp32',
           order: 'listens_total',

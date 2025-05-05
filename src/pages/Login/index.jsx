@@ -1,51 +1,49 @@
 import LOGO from '@/assets/images/icon/logo.svg'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { message } from 'antd'
+import { message, Input } from 'antd'
 import { userApi } from '@/api/user'
 import { useUserStore } from '@/store/user'
-
+// import axios from 'axios'
 
 
 const Login = () => {
-  const { Token, setToken, userInfo, setUserInfo } = useUserStore()
+  const navigate = useNavigate()
+  const { token, setToken, userInfo, setUserInfo } = useUserStore()
   const [ username, setUserName ] = useState('')
   const [ password, setPassword ] = useState('')
-  const [ email, setEmail ] = useState('')
   
   // 如何登入？
-  // 輸入信箱或使用者名稱 -> 資訊傳給登入API -> 後端確認資料庫事是否有該使用者 -> 回傳token給前端 -> 前端儲存token到localStorage -> 是否為登入狀態？就看本地有無token
+  // 輸入使用者名稱或密碼 -> 資訊傳給登入API -> 後端確認資料庫事是否有帳密 -> (後端會加密變成JWT)回傳token給前端 -> 前端儲存token到localStorage -> 是否為登入狀態？看本地有無token(後端會測試token時效性)
   const login = async () => {
     // 防呆警示
-    if (!username || !password || !email) {
-      message.warning('請輸入使用者名稱、密碼和電子信箱')
+    if (!username || !password) {
+      message.warning('請輸入使用者名稱或信箱')
       return
     }
     try {
-      // 取回token
-      const { accessToken, firstName } = await userApi.login(username, password)
+      // 從dummyjson取回token
+      const { accessToken, image } = await userApi.login(username, password)
       console.log('AccessToken:', accessToken)
 
       // 存入token userInfo到localStorage
       setToken(accessToken)
-      setUserInfo({ firstName })
+      setUserInfo({ image })
+
+      // 導向首頁
+      navigate('/')
 
       // 通知登入成功
       message.success('登入成功')
     } catch (err) {
       // 通知登入錯誤
-      message.error('登入失敗，請檢查您的使用者名稱、密碼和電子信箱')
+      message.error('登入失敗，請檢查您的使用者名稱或密碼')
       console.error(err)
     }
   }
 
 
-  // const logout = () => {
-    // setToken('')
-    // setUserInfo({})    
-    // 通知登出成功
-    // message.success('已登出成功')
-  // } 
+
  
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -78,22 +76,26 @@ const Login = () => {
             </button>
           </li>
         </ul>
-        
+        {/* 登入內容 */}
         <div class="login-form">
-          <div className="Group pb-4">
-            <div className="labelGroup flex flex-col items-center">
-              <label className='mail-label mt-5 mb-2 text-[13px]' for="login-username">電子信箱</label>
-              <input 
-              type= "email" 
-              value= {email}
-              onChange={(e) => setEmail(e.target.value)}
-
-              onKeyDown={handleKeyDown}
-
-              className='mail-input p-3 text-white ' 
-              placeholder='輸入電子信箱'
-
-               />
+          <div className="Group py-4">
+            <div className="labelGroup flex flex-col items-start">
+              <label className='username text-[16px]'>帳號</label>
+              <Input
+                className='custom-login-input'
+                value={username}
+                onChange={(e) => setUserName(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="請輸入帳號"
+              />
+              <label className='password mt-2 text-[16px]'>密碼</label>
+              <Input.Password
+                className='custom-login-input'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="請輸入密碼"
+              />
             </div>
           </div>
         </div>

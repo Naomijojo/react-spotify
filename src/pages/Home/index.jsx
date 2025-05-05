@@ -65,7 +65,7 @@ const Home = () => {
           recommendedTracks.map((album, index) => (
             <div key={album.id} className="recommendCard flex items-center flex-1 rounded-[4px] h-[100%]" 
             onClick={() => {
-              setTrackList(recommendedTracks) //setTrackList用來更新播放歌單 先有歌單才能播放recommendedTracks歌曲
+              setTrackList(recommendedTracks)    // setTrackList用來更新播放歌單 先有歌單才能播放recommendedTracks歌曲
               goToPlaying(index, album.album_id, album.tracks)
             }}>
               <div className="img-container relative flex-shrink-0 w-[68px] h-[68px]">

@@ -7,12 +7,12 @@ import { myMusicApi } from '@/api/myMusic';
 
 const Recommend = () => {
   const navigate = useNavigate()
-  const location = useLocation()                            //導航查詢參數
-  const queryParams = new URLSearchParams(location.search)  //導航查詢參數
-  const albumId = queryParams.get('albumId')               // 從search頁獲取 albumId 過來
-
+  const location = useLocation()                            // 導航查詢參數
+  const queryParams = new URLSearchParams(location.search)  // 導航查詢參數
+  const albumId = queryParams.get('albumId')                // 從search頁獲取 albumId 過來
+   
   const audioRef = useRef(null)
-  const { currentTrack, isPlaying, togglePlaying, trackList} = useMusicStore()
+  const { currentTrack, isPlaying, togglePlaying, trackList, playTrack } = useMusicStore() 
 
   useEffect(() => {
     const fetchAlbumTracks = async () => {
@@ -30,17 +30,17 @@ const Recommend = () => {
     fetchAlbumTracks()
   }, [albumId])
 
-  useEffect(() => {
-    const audio = audioRef.current // HTML元素的DOM節點->audioRef.current
-    console.log(audio)
-    if (!audio) return             //如果 audioRef.current是null 直接退出函數不執行後續邏輯
-
-    if (isPlaying){
-      audio.play()
-    } else {
-      audio.pause()
+  useEffect(() => {                      // 使用 audioRef.current 前，先確認 audioRef 與 audioRef.current 不為 null
+    if (audioRef && audioRef.current) {  // HTML元素的DOM節點->audioRef.current
+      // console.log(audioRef)      
+      if (isPlaying) { 
+        audioRef.current.play()
+      } else {
+        audioRef.current.pause()
+      } 
     }
-  },[currentTrack, isPlaying])     // 換歌&播放狀態改變時重新執行
+  },[currentTrack, isPlaying])           // 換歌&播放狀態改變時重新執行
+
 
   const formatDuration = (duration) => {
     const minutes = Math.floor(duration / 60);
@@ -95,7 +95,7 @@ const Recommend = () => {
 
               <audio
                 ref={audioRef}
-                src={currentTrack.audio}
+                src={currentTrack?.audio}
               />
               <button className="control-btn play-pause-btn" onClick={togglePlaying}>
               {isPlaying ? (
@@ -109,10 +109,10 @@ const Recommend = () => {
 
           {/* 專輯歌曲列表 */}
           <div className="TypeList-content">
-            {trackList.map((item) => (
+            {trackList.map((item, index) => (
               <div key={item.id} 
                 className="song-item flex items-center justify-between mb-3" 
-                onClick={() => { togglePlaying() }}>
+                onClick={() => playTrack(index)}>
                 <div className="flex justify-center items-center">
                   <img className='w-14 h-14 mr-3' src={item.image} alt="" />
                   <div className="flex flex-col ml-2">
@@ -125,7 +125,7 @@ const Recommend = () => {
             ))}
         
           </div>
-          <MiniPlayer/>
+          <MiniPlayer audioRef={audioRef} src={currentTrack?.audio}/>
         </div>
       </main>
     </div>

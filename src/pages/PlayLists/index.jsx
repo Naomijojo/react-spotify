@@ -1,15 +1,17 @@
 import { sortOptions } from "@/utills/sortOptions"
-import { useEffect, useState } from "react"
-// import { myMusicApi } from "@/api/myMusic"
+import { useState, useEffect } from "react"
+import { myMusicApi } from "@/api/myMusic"
 import PlaylistCard from "@/components/PlaylistCard"
 import TabBar from "@/components/TabBar"
 import { useNavigate } from "react-router-dom"
+
   
 
 const PlayLists = () => {
   const [ isSortOpen, setSortIsOpen ] = useState(false)
   const [ selectedSortOptions, setSelectedSortOptions ] = useState(sortOptions[0].label)
-  // const [ playlistData, setPlaylistData ] = useState([])
+  const [ playlistData, setPlaylistData ] = useState([])
+
 
   const navigate = useNavigate()
 
@@ -22,54 +24,30 @@ const PlayLists = () => {
     setSortIsOpen(false)
   }
 
-  // const getPlaylistData = async() => {
-  //   const { data } = await myMusicApi.getPlayList()
-  //   setPlaylistData(data)
-  // }  
-
-  // useEffect(() => {
-  //   getPlaylistData()
-  // },[])
-  const playlistData = [
-    {
-      "id": 1,
-      "image": "https://seed-mix-image.spotifycdn.com/v6/img/artist/5H8TJITZE1sPjVR2ACzXNS/zh-Hant/default",
-      "title": "伍佰",
-      "subtitle": "藝人",
-      "category": "artist" 
-    },
-    {
-      "id": 2,
-      "image": "https://i.scdn.co/image/ab6761610000e5eb438e5730e9e86121f329d2dd",
-      "title": "陳奕迅",
-      "subtitle": "藝人",
-      "category": "artist" 
-    },
-    {
-      "id": 3,
-      "image": "https://i.scdn.co/image/fe26346459e770591ec9147b53a2b156f6815e0f",
-      "title": "王菲",
-      "subtitle": "藝人",
-      "category": "artist" 
-    },
-    {
-      "id": 4,
-      "image": "https://i.scdn.co/image/ab67616d00001e0276f073ba4f233d6e858115b3",
-      "title": "張雨生",
-      "subtitle": "藝人",
-      "category": "artist"
-    },
-    {
-      "id": 5,
-      "image": "https://i.scdn.co/image/ab676161000051749ffb964ffbd8af492f1d6471",
-      "title": "王傑",
-      "subtitle": "藝人",
-      "category": "artist" 
+  const getPlaylistData = async() => {
+    try {
+      const artists = await myMusicApi.getArtists(6)
+      console.log('artists',artists)
+      setPlaylistData(artists)
+    } catch (error) {
+      console.error('獲取歌手資訊錯誤:', error)
     }
-  ]
+  }  
+
+  useEffect(() => {
+    getPlaylistData()
+  },[])
+  
 
   const handleMoreArtist = () => {
     navigate(`/playlist/moreArtist`)
+  }
+
+  const handleArtistClick = async (artist) => {
+    navigate(`/artist?name=${encodeURIComponent(artist.name)}&image=${encodeURIComponent(artist.image)}`) // 傳遞歌手名字和圖片
+    // 避免特殊字符導致URL無法正確解析:
+    // 1.encodeURIComponent()：編碼所有特殊字符，包括 &, =, ?, / 等等...
+    // 2.encodeURI()：保留 URL 結構字符，只編碼其他特殊字符
   }
   return (
     <div className="myPlaylist mt-[72px] mb-[150px]">
@@ -100,68 +78,15 @@ const PlayLists = () => {
     </div>
     <div className="flex flex-col gap-3 mt-4">
       {playlistData.map((item) => (
-        <PlaylistCard
-          key={item.id}
-          image={item.image}
-          title={item.title}
-          subtitle={item.subtitle}
-        />
+        <div key={item.id} onClick={() => handleArtistClick(item)}>
+          <PlaylistCard
+            image={item.image}
+            name={item.name}
+            subtitle={item.subtitle}
+          />
+        </div>
       ))}
-      {/* <div className="playlistCard flex">
-        <div className="img-container mr-3 relative">
-          <img className="w-[72px] h-[72px] likeGradient" src="" alt="" />
-          <i className="fa-solid fa-heart fa-xl" style={{color: '#ffffff'}}></i>
-        </div>
-        <div className="text-container">
-          <div className="text-title text-xl font-semibold pt-3">已按讚的歌曲</div>
-          <div className="text-subtitle text-sm text-gray-400">播放清單。5首歌</div>
-        </div>
-      </div>
-      <div className="playlistCard flex">
-        <div className="img-container mr-3">
-          <img className="w-[72px] h-[72px] rounded-full" src="https://seed-mix-image.spotifycdn.com/v6/img/artist/5H8TJITZE1sPjVR2ACzXNS/zh-Hant/default" alt="" />
-        </div>
-        <div className="text-container">
-          <div className="text-title text-xl font-semibold pt-3">伍佰</div>
-          <div className="text-subtitle text-sm text-gray-400">藝人</div>
-        </div>
-      </div>
-      <div className="playlistCard flex">
-        <div className="img-container mr-3">
-          <img className="w-[72px] h-[72px] rounded-full" src="https://i.scdn.co/image/ab6761610000e5eb438e5730e9e86121f329d2dd" alt="" />
-        </div>
-        <div className="text-container">
-          <div className="text-title text-xl font-semibold pt-3">陳奕迅</div>
-          <div className="text-subtitle text-sm text-gray-400">藝人</div>
-        </div>
-      </div>
-      <div className="playlistCard flex">
-        <div className="img-container mr-3">
-          <img className="w-[72px] h-[72px] rounded-full" src="https://i.scdn.co/image/fe26346459e770591ec9147b53a2b156f6815e0f" alt="" />
-        </div>
-        <div className="text-container">
-          <div className="text-title text-xl font-semibold pt-3">王菲</div>
-          <div className="text-subtitle text-sm text-gray-400">藝人</div>
-        </div>
-      </div>
-      <div className="playlistCard flex">
-        <div className="img-container mr-3">
-          <img className="w-[72px] h-[72px] rounded-full" src="https://i.scdn.co/image/ab67616d00001e0276f073ba4f233d6e858115b3" alt="" />
-        </div>
-        <div className="text-container">
-          <div className="text-title text-xl font-semibold pt-3">張雨生</div>
-          <div className="text-subtitle text-sm text-gray-400">藝人</div>
-        </div>
-      </div>
-      <div className="playlistCard flex">
-        <div className="img-container mr-3">
-          <img className="w-[72px] h-[72px] rounded-full" src="https://i.scdn.co/image/ab676161000051749ffb964ffbd8af492f1d6471" alt="" />
-        </div>
-        <div className="text-container">
-          <div className="text-title text-xl font-semibold pt-3">王傑</div>
-          <div className="text-subtitle text-sm text-gray-400">藝人</div>
-        </div>
-      </div> */}
+
       <div className="playlistCard flex" onClick={handleMoreArtist}>
         <div className="img-container mr-3 relative">
           <div className="w-[72px] h-[72px] rounded-full bg-[#282828]">
@@ -192,3 +117,41 @@ const PlayLists = () => {
 }
 
 export default PlayLists
+
+// setPlaylistData([
+      //   {
+      //     id: 1,
+      //     image: "https://seed-mix-image.spotifycdn.com/v6/img/artist/5H8TJITZE1sPjVR2ACzXNS/zh-Hant/default",
+      //     name: "伍佰",
+      //     subtitle: "藝人",
+      //     category: "artist" 
+      //   },
+      //   {
+      //     id: 2,
+      //     image: "https://i.scdn.co/image/ab6761610000e5eb438e5730e9e86121f329d2dd",
+      //     name: "陳奕迅",
+      //     subtitle: "藝人",
+      //     category: "artist" 
+      //   },
+      //   {
+      //     id: 3,
+      //     image: "https://i.scdn.co/image/fe26346459e770591ec9147b53a2b156f6815e0f",
+      //     name: "王菲",
+      //     subtitle: "藝人",
+      //     category: "artist" 
+      //   },
+      //   {
+      //     id: 4,
+      //     image: "https://i.scdn.co/image/ab67616d00001e0276f073ba4f233d6e858115b3",
+      //     name: "張雨生",
+      //     subtitle: "藝人",
+      //     category: "artist"
+      //   },
+      //   {
+      //     id: 5,
+      //     image: "https://i.scdn.co/image/ab676161000051749ffb964ffbd8af492f1d6471",
+      //     name: "王傑",
+      //     subtitle: "藝人",
+      //     category: "artist" 
+      //   }
+      // ])

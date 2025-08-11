@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+// import { useCallback, useEffect } from 'react';
 import { Slider } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useMusicStore } from '@/store/music';
@@ -7,7 +7,6 @@ import { useMusicStore } from '@/store/music';
 const Playing = () => {
   const navigate = useNavigate()
   
-  const audioRef = useRef(null)
   const { currentTrack,
     isPlaying,
     favorites,
@@ -17,93 +16,23 @@ const Playing = () => {
     toggleFavorite,
     progress,
     duration,
-    updateProgress,
+    setCurrentTime,
     playMode,
     setPlayMode 
   } = useMusicStore()
-  
-  
-  // * 時間控制 -> 再用useEffect偵測 -> 放進全局控制
-  const handleTimeChange = useCallback(() => {
-    // 防呆機制 -> 如果 audioRef.current是null 直接退出函數不執行後續邏輯
-    const audio = audioRef.current
-    if (!audio) return                 
 
-    // console.log('Time',audio.currentTime)   // 印出查看：HTMLAudioElement >> currentTime=取得、設定當前播放秒數(sec)
-    // console.log('duration',audio.duration)  // 印出查看：歌曲總時長
-    
-    // progress 及 duration 的更新
-    updateProgress(audio.currentTime, audio.duration )
-  },[updateProgress])                       // 依賴 updateProgress 函式，當 updateProgress 改變時重新執行，依賴項未改變時不會重新創建，提升效能
-
-
-  // * 進度條拖動控制
+  // 進度條拖動控制
   const handleProgressChange = (value) => {
-    // 防呆機制 -> 如果 audioRef.current是null 直接退出函數不執行後續邏輯
-    const audio = audioRef.current
-    if (!audio) return
-    if (audio){
-      audioRef.current.currentTime = value
-      updateProgress(value, audio.duration)
-    }
+    setCurrentTime(value)
   }
 
-  // * 更新進度[(加入監聽 -> 頁面更新時=組件卸載 就要移除監聽(避免記憶體洩漏) 不要遺留沒使用的變數或函數]
-  useEffect(() => {
-    const audio = audioRef.current
-    audio.addEventListener('timeupdate', handleTimeChange)
-    return () => {
-      audio.removeEventListener('timeupdate', handleTimeChange)
-    }
-  },[]) //加上空陣列 []，表示只在第一次 mount 時綁一次
-  
-
-  
-  // *播放結束時 
-  // 先確認handleEnded內的函式(確認播放模式是循環還是重複 如果是重複 會把currentTime歸零再播放)
-  // 如果是依序或隨機 就使用nextTrack方法
-  useEffect(() => {
-    const audio = audioRef.current
-    if (!audio) return
-
-    const handleEnded = () => {
-      if(playMode === 'repeat'){
-        audio.currentTime = 0
-        audio.play()
-      } else {
-        nextTrack()
-      }
-    }
-    audio.addEventListener('ended', handleEnded)
-    return () => {
-      audio.removeEventListener('ended', handleEnded)
-    }
-  },[playMode, nextTrack])
-
-
-
-  useEffect(() => {
-    const audio = audioRef.current // HTML元素的DOM節點->audioRef.current
-    console.log(audio)
-
-    if (isPlaying) {
-      audio.play().catch((error) => { //對 audioRef.current 的存在性檢查，並使用 async 函數處理 play() 方法的返回值，以處理可能的 Promise
-        console.error('播放失敗:', error)
-      })
-    } else {
-      audio.pause()
-    }
-  }, [currentTrack, isPlaying])    // 換歌 & 播放狀態改變時重新執行 
-
-
- // currentTime原本為秒數 需要 Math.floor 進行格式化
+  // currentTime原本為秒數 需要 Math.floor 進行格式化
   const formatTime = (seconds) => {
     if (!seconds) return '0:00'
-    const minutes = Math.floor(seconds / 60) // Math.floor無條件捨去，回傳「小於等於」所給數字的最大整數 => 向下取整數
+    const minutes = Math.floor(seconds / 60) 
     const secs = Math.floor(seconds % 60)
     return `${minutes}:${secs < 10 ? '0' : ''}${secs}` // 秒數須為兩位數
   }
-
 
   const handleMini = () => {
     navigate(`/songType/recommend`)
@@ -113,10 +42,6 @@ const Playing = () => {
 
   return (
     <>
-      <audio
-        ref={audioRef}
-        src={currentTrack.audio}
-      />
       <div className="music-player">
       <div className="topArea">
         <button className="button flex h-[40px]" onClick={handleMini}>

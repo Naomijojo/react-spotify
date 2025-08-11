@@ -5,8 +5,9 @@ import SearchHeader from './SearchHeader';
 import PlayHeader from './PlayHeader';
 import TabBar from './TabBar';
 import MiniPlayer from './MiniPlayer';
+import GlobalAudio from './GlobalAudio';
 import { useMusicStore } from '@/store/music';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useUserStore } from '@/store/user';
 
 
@@ -15,7 +16,6 @@ const Layout = () => {
   const location = useLocation() 
   const noMainRoutes = ['/login']
 
-  const audioRef = useRef(null)
   const currentTrack = useMusicStore((state) => state.currentTrack)
   const { token } = useUserStore()
 
@@ -46,7 +46,7 @@ const Layout = () => {
   }
 
   useEffect(() => {
-    const authPaths = ['/playlist'] 
+    const authPaths = ['/playlist', '/artist'] 
     if (authPaths.some(path => location.pathname.includes(path)) && !token) {
       navigate('/login')
     }
@@ -65,8 +65,11 @@ const Layout = () => {
 
       {showFooter() && <Footer/>}
 
-      { token && currentTrack && <MiniPlayer />}
-      <audio ref={audioRef} />
+      {/* 有登入且有播放歌曲才顯示 miniplayer */}
+      { currentTrack && <MiniPlayer />}
+      
+      {/* 改用全局管理audio miniplayer才能出現*/}
+      <GlobalAudio />
       
       <TabBar className="absolute bottom-0 left-0 w-full pl-0"/>
       

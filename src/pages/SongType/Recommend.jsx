@@ -1,6 +1,6 @@
 import MINILOGO from '@/assets/images/icon/minilogo.svg'
 import MiniPlayer from "@/components/MiniPlayer"
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useMusicStore } from '@/store/music';
 import { myMusicApi } from '@/api/myMusic';
@@ -11,7 +11,6 @@ const Recommend = () => {
   const queryParams = new URLSearchParams(location.search)  // 導航查詢參數
   const albumId = queryParams.get('albumId')                // 從search頁獲取 albumId 過來
    
-  const audioRef = useRef(null)
   const { currentTrack, isPlaying, togglePlaying, trackList, playTrack } = useMusicStore() 
 
   useEffect(() => {
@@ -20,7 +19,7 @@ const Recommend = () => {
         try {
           const tracks = await myMusicApi.getAlbum(albumId)
           // 以albumId獲取到的歌曲列表
-          console.log('專輯的歌曲列表:', tracks)
+          console.log('album的歌曲列表:', tracks)
         } catch (error) {
           console.error(`獲取專輯 ${albumId} 的歌曲錯誤:`, error)
         }
@@ -29,18 +28,6 @@ const Recommend = () => {
 
     fetchAlbumTracks()
   }, [albumId])
-
-  useEffect(() => {                      // 使用 audioRef.current 前，先確認 audioRef 與 audioRef.current 不為 null
-    if (audioRef && audioRef.current) {  // HTML元素的DOM節點->audioRef.current
-      // console.log(audioRef)      
-      if (isPlaying) { 
-        audioRef.current.play()
-      } else {
-        audioRef.current.pause()
-      } 
-    }
-  },[currentTrack, isPlaying])           // 換歌&播放狀態改變時重新執行
-
 
   const formatDuration = (duration) => {
     const minutes = Math.floor(duration / 60);
@@ -93,10 +80,6 @@ const Recommend = () => {
             <div className="play-control flex justify-between items-center">
               <p className='length'>{calculateTotalDuration(trackList)}</p>
 
-              <audio
-                ref={audioRef}
-                src={currentTrack?.audio}
-              />
               <button className="control-btn play-pause-btn" onClick={togglePlaying}>
               {isPlaying ? (
                 <i className="fa-regular fa-circle-stop" style={{color:'#1db954'}}></i>
@@ -125,7 +108,6 @@ const Recommend = () => {
             ))}
         
           </div>
-          <MiniPlayer audioRef={audioRef} src={currentTrack?.audio}/>
         </div>
       </main>
     </div>

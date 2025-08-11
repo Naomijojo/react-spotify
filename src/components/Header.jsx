@@ -44,7 +44,13 @@ const Header = () => {
       <div className="logo-box">
       {token ? (
         <div className="user">
-          <img src={userInfo.image} alt="User Avatar" className="w-8 h-8 rounded-full" />
+          {userInfo.image ? (
+            <img src={userInfo.image} alt="User Avatar" className="w-8 h-8 rounded-full" />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center">
+              <i className="fa-solid fa-user text-white text-sm"></i>
+            </div>
+          )}
         </div>
       ) : (
         <img className="logo" src={LOGO} alt="LOGO" />

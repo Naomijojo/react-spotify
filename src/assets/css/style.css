@@ -160,9 +160,10 @@
 .recent-input-container input,
 .moreArtist input{
   padding: 8px 40px;
-  color: #000;
+  color: #000 !important;
   border-radius: 6px;
   outline: none;
+  background-color: white !important;
 }
 
 

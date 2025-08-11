@@ -1,110 +1,173 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware'; //允許將狀態存儲到瀏覽器的 localStorage 中，即使刷新頁面，狀態也能保留
+import { persist } from 'zustand/middleware';
+
 
 export const useMusicStore = create(
   persist(
     (set, get) => ({
-        // 1.先儲存現有狀態
-        
-        // 三種播放模式 : 依序(預設)、隨機、重複
-        playMode: 'sequential', //sequential,random,repeat
-        trackList: [],          //播放清單管理：待播放歌曲清單
-        currentTrack: null,     //播放控制：當前播放歌曲(未選擇歌曲)
-        currentIndex: 0,        //播放控制：當前播放歌曲索引
-        progress: 0,            //進度條控制：播放進度
-        duration: 0,            //進度條控制：歌曲總長度
-        isPlaying: false,       //是否正在播放
-        favorites: [],          //收藏控制
+      // ==================== 定義狀態 ====================
+      
+      // 播放狀態
+      isPlaying: false,      
+      currentTrack: null,     
+      currentIndex: 0,        
+      // 播放清單狀態
+      trackList: [],          
+      playMode: 'sequential', // 播放模式：sequential(依序)、random(隨機)、repeat(重複)
+      // 播放進度
+      progress: 0,            // 播放進度(秒)
+      duration: 0,            // 歌曲總長度(秒)
+      // 收藏
+      favorites: [],          // 收藏的歌曲列表
+      // 全局
+      audioRef: null,        
 
-        setPlayMode: (mode) => set({ playMode: mode }),
-        setCurrentTrack: (track) => set({ currentTrack: track }),
-        setIsPlaying: (value) => set({ isPlaying: value }),
-        updateProgress: (progress, duration) => set({ progress, duration }),
-        togglePlaying: () => set((state) => ({ isPlaying: !state.isPlaying })),  // 增加state取得全部狀態 並用!isPlaying控制是否播放
-        toggleFavorite: (track) => {
-          // 查看當前歌曲是復否已收藏：some遍歷favorites陣列 
-          const hasFavorite = get().favorites.some(item => item.id === track.id)
-          // 更新函數：使用set(更新zustand狀態)+state(獲取當前狀態值)
-          if(hasFavorite){
-            // 如已收藏->需移除：使用filter過濾favorites陣列中與track.id相同的歌 更新favorites陣列來將歌移除
-            set(state => ({ favorites: state.favorites.filter(item => item.id !== track.id) }))
-          } else {
-            // 如為收藏->需收藏：使用展開運算符 保留原本已收藏歌曲 把新的track加入陣列並更新favorites陣列來加入收藏
-            set(state => ({ favorites: [ ...state.favorites, track ] }))
-          }
-        },
+      // =================== set方法 =====================
+      
+      setIsPlaying: (value) => set({ isPlaying: value }),
+      setCurrentTrack: (track) => set({ currentTrack: track }),
+      setTrackList: (trackList) => set({ trackList }),
+      setPlayMode: (mode) => set({ playMode: mode }),
+      updateProgress: (progress, duration) => set({ progress, duration }),
+      setAudioRef: (ref) => set({ audioRef: ref }),
 
-        // 2.切換播放清單
-        setTrackList: (trackList) => set({ trackList }),
-        // 3.切換歌曲時(更新狀態)
-        playTrack: (index) => {
-          const tracks = get().trackList // 從trackList中取得所有歌曲
-          const track = tracks[index]    // 根據索引找到要播放的歌曲
-          
-          // 只有在選擇的曲目跟當前曲目不同時 才更新播放狀態 (才不會重疊播放音樂)
-          if (track) {
-            // 如果有正在播放的曲目，先停止當前曲目
-            if (get().isPlaying) {
-              set({ isPlaying: false }) 
-            }
-            // 更新當前曲目和狀態
-            set({
-              currentTrack: track,         // 更新 currentTrack 為這首歌
-              currentIndex: index,         // 更新 currentIndex 為索引值
-              isPlaying: true,             // 正在播放
-            });
+      // ==================== 播放控制 ====================
+      
+      // 播放/暫停切換
+      togglePlaying: () => {
+        const { audioRef, isPlaying } = get()
+        if (audioRef) {
+          if (isPlaying) {
+            audioRef.pause()
+            set({ isPlaying: false })
+          } else {
+            audioRef.play().catch((error) => {
+              console.error('播放失敗:', error)
+            })
+            set({ isPlaying: true })
           }
-        },
+        } else {
+          // 如果沒有audioRef，只切換狀態
+          set({ isPlaying: !isPlaying })
+        }
+      },
+      // 播放
+      play: () => {
+        const { audioRef } = get()
+        if (audioRef) {
+          audioRef.play()
+            .then(()=>{
+              console.log('audioRef',audioRef)
+              console.log('播放成功')
+              set({ isPlaying: true })
+            })
+            .catch((error) => {
+              console.error('播放失敗(音源失效):', error)
+            })
+        }
+      },
+      // 暫停
+      pause: () => {
+        const { audioRef } = get()
+        if (audioRef) {
+          audioRef.pause()
+          set({ isPlaying: false })
+        }
+      },
+      // 設置播放時間
+      setCurrentTime: (time) => {
+        const { audioRef } = get()
+        //console.log('Time',audioRef.currentTime)   // 印出查看：HTMLAudioElement >> currentTime=取得、設定當前播放秒數(sec)
+        //console.log('duration',audioRef.duration)  // 印出查看：歌曲總時長
+        if (audioRef) {
+          audioRef.currentTime = time
+          set({ progress: time })
+        }
+      },
+
+      // ==================== 播放索引、上下首切換 ====================
+      
+      // 播放索引的歌曲
+      playTrack: (index) => {
+        const { trackList } = get()
+        const track = trackList[index]
         
-        // 4.新增專輯清單到播放器
-        setAlbumTracks: (albumTracks) => {
+        // 解決重疊播放：如果歌曲存在，要先暫停當前播放，並更新當前歌曲狀態和進度條為0
+        if (track) {
+          get().pause()
           set({
-            trackList: albumTracks,       // 更新播放清單為專輯中的歌曲
-            currentTrack: albumTracks[0], // 預設第一首
-            currentIndex: 0, 
-            isPlaying: true, 
+            currentTrack: track,
+            currentIndex: index,
+            isPlaying: true,
+            progress: 0,
+            duration: 0
           })
-        },
-        // 5.下一首切換 
-        nextTrack: () => {
-          const { trackList, currentIndex, playMode } = get()
-          let nextIndex
-          if (playMode === 'random') {
-            nextIndex = Math.floor(Math.random() * trackList.length)  // 隨機:Math.random()*trackList的10首歌曲 印出隨機的1-9
-          } else {
-            nextIndex = (currentIndex + 1) % trackList.length
-          }
-          set({
-            currentTrack: trackList[nextIndex],
-            currentIndex: nextIndex,
-            isPlaying: true
-          })
-        },
-        // 6.上一首切換 
-        prevTrack: () => {
-          const { trackList, currentIndex, playMode } = get()
-          let prevIndex
-          if (playMode === 'random'){
-            prevIndex = Math.floor(Math.random() * trackList.length)
-          } else {
-            prevIndex = (currentIndex - 1 + trackList.length) % trackList.length
-          }
-          set({
-            currentTrack: trackList[prevIndex],
-            currentIndex: prevIndex,
-            isPlaying: true
-          })
-         }
-      }), 
-      { 
-        name: 'music',
-        // 持久化儲存：只保留需要在頁面重新載入後保留的狀態部分
-        partialize: (state) => ({
-          favorites: state.favorites,
-          currentTrack: state.currentTrack,
-          currentIndex: state.currentIndex,
-          trackList: state.trackList
-        })
+          // 更新完再開始播放新歌曲
+          setTimeout(() => {
+            get().play()
+          }, 100)
+        }
+      },
+      // 切下一首
+      nextTrack: () => {
+        const { trackList, currentIndex, playMode } = get()
+        if (trackList.length === 0) return
+        
+        let nextIndex
+        if (playMode === 'random') {
+          nextIndex = Math.floor(Math.random() * trackList.length)
+        } else {
+          nextIndex = (currentIndex + 1) % trackList.length
+        }
+        get().playTrack(nextIndex)
+      },
+      // 切上一首
+      prevTrack: () => {
+        const { trackList, currentIndex, playMode } = get()
+        if (trackList.length === 0) return
+        
+        let prevIndex
+        if (playMode === 'random') {
+          prevIndex = Math.floor(Math.random() * trackList.length)
+        } else {
+          prevIndex = (currentIndex - 1 + trackList.length) % trackList.length
+        }
+        get().playTrack(prevIndex)
+      },
+
+
+      
+      // ==================== 收藏管理 ====================
+      
+      // 切換收藏狀態
+      toggleFavorite: (track) => {
+        const { favorites } = get()
+        const hasFavorite = favorites.some(item => item.id === track.id)
+        
+        if (hasFavorite) {
+          // 有 -> 移除收藏
+          set(state => ({ 
+            favorites: state.favorites.filter(item => item.id !== track.id) 
+          }))
+        } else {
+          // 沒有 -> 添加收藏
+          set(state => ({ 
+            favorites: [...state.favorites, track] 
+          }))
+        }
       }
+      
+    }), 
+    { 
+      name: 'music',
+      // 持久化儲存：只保留需要在頁面重新載入後保留的狀態部分
+      partialize: (state) => ({
+        favorites: state.favorites,
+        currentTrack: state.currentTrack,
+        currentIndex: state.currentIndex,
+        trackList: state.trackList,
+        playMode: state.playMode
+      })
+    }
   )
 )

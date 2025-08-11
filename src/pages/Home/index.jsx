@@ -4,10 +4,9 @@ import { useState, useEffect } from "react"
 import { useMusicStore } from "@/store/music"
 import Loading from "@/components/Loading"
 
-
 const Home = () => {
   const navigate = useNavigate()
-  const { trackList, playTrack, setTrackList } = useMusicStore()   // 暫放在“根據你最近聽過的音樂”
+  const { trackList, playTrack, setTrackList } = useMusicStore()   // 暫放在"根據你最近聽過的音樂"
 
   const [recommendedTracks, setRecommendedTracks] = useState([])
   const [weekTracks, setWeekTracks] = useState([])
@@ -60,6 +59,7 @@ const Home = () => {
 
   return (
     <div className="homePage-container flex flex-col flex-nowrap w-full ">
+      {/* 你的熱門合輯 */}
       <div className="recommendCard-container flex flex-wrap justify-center items-center mt-[80px]">
         {recommendedTracks.length && (
           recommendedTracks.map((album, index) => (
@@ -69,7 +69,13 @@ const Home = () => {
               goToPlaying(index, album.album_id, album.tracks)
             }}>
               <div className="img-container relative flex-shrink-0 w-[68px] h-[68px]">
-                <img className="w-[100%] h-[100%] rounded-[4px]" src={album.image} alt="" />
+                {album.image ? (
+                  <img className="w-[100%] h-[100%] rounded-[4px]" src={album.image} alt="專輯封面" />
+                ) : (
+                  <div className="w-[100%] h-[100%] rounded-[4px] bg-gray-400 flex items-center justify-center">
+                    <i className="fa-solid fa-music text-white text-xl"></i>
+                  </div>
+                )}
                 <div className="img-overlay absolute inset-0 bg-opacity-0 "></div>
               </div>
               <div className="text-container ml-2 flex-grow flex max-h-[100%] items-center">
@@ -90,7 +96,13 @@ const Home = () => {
                 setTrackList(weekTracks) 
                 goToPlaying(index, album.album_id, album.tracks)
               }}>
-                <img className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl" src={album.album_image} alt="" />
+                {album.album_image ? (
+                  <img className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl" src={album.album_image} alt="專輯封面" />
+                ) : (
+                  <div className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl bg-gray-400 flex items-center justify-center">
+                    <i className="fa-solid fa-music text-white text-2xl"></i>
+                  </div>
+                )}
                 <div className="Card-title max-h-12 overflow-hidden">{album.album_name}</div>
               </div>
             ))
@@ -102,8 +114,17 @@ const Home = () => {
         <h3 className="Section-encoreTitle mt-6 mb-3">專為你精心打造</h3>
         <div className="Card-container">
           {monthTracks.map((item, index) => (
-            <div key={item.id} className="Card" onClick={() => goToPlaying(index, item.id)}>
-              <img className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl" src={item.album_image} alt="" />
+            <div key={item.id} className="Card" onClick={() => {
+              setTrackList(monthTracks)
+              goToPlaying(index, item.album_id || item.id, monthTracks)
+            }}>
+              {item.album_image ? (
+                <img className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl" src={item.album_image} alt="專輯封面" />
+              ) : (
+                <div className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl bg-gray-400 flex items-center justify-center">
+                  <i className="fa-solid fa-music text-white text-2xl"></i>
+                </div>
+              )}
               <div className="Card-title max-h-12 overflow-hidden">{item.album_name}</div>
             </div>
           ))}
@@ -114,8 +135,17 @@ const Home = () => {
         <h3 className="Section-encoreTitle mt-6 mb-3">電台推薦</h3>
         <div className="Card-container">
           {listensTotalTracks.map((item, index) => (
-            <div key={item.id} className="Card" onClick={() => goToPlaying(index, item.id)}>
-              <img className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl" src={item.album_image} alt="" />
+            <div key={item.id} className="Card" onClick={() => {
+              setTrackList(listensTotalTracks)
+              goToPlaying(index, item.album_id || item.id, listensTotalTracks)
+            }}>
+              {item.album_image ? (
+                <img className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl" src={item.album_image} alt="專輯封面" />
+              ) : (
+                <div className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl bg-gray-400 flex items-center justify-center">
+                  <i className="fa-solid fa-music text-white text-2xl"></i>
+                </div>
+              )}
               <div className="Card-title max-h-12 overflow-hidden">{item.album_name}</div>
             </div>
           ))}
@@ -126,8 +156,17 @@ const Home = () => {
         <h3 className="Section-encoreTitle mt-6 mb-3">重溫經典</h3>
         <div className="Card-container">
           {listensWeekTracks.map((item, index) => (
-            <div key={item.id} className="Card" onClick={() => goToPlaying(index, item.id )}>
-              <img className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl" src={item.album_image} alt="" />
+            <div key={item.id} className="Card" onClick={() => {
+              setTrackList(listensWeekTracks)
+              goToPlaying(index, item.album_id || item.id, listensWeekTracks)
+            }}>
+              {item.album_image ? (
+                <img className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl" src={item.album_image} alt="專輯封面" />
+              ) : (
+                <div className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl bg-gray-400 flex items-center justify-center">
+                  <i className="fa-solid fa-music text-white text-2xl"></i>
+                </div>
+              )}
               <div className="Card-title max-h-12 overflow-hidden">{item.album_name}</div>
             </div>
           ))}
@@ -138,8 +177,17 @@ const Home = () => {
         <h3 className="Section-encoreTitle mt-6 mb-3">最新發行音樂</h3>
         <div className="Card-container">
           {listensMonthTracks.map((item, index) => (
-            <div key={item.id} className="Card" onClick={() => goToPlaying(index, item.id)}>
-              <img className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl" src={item.album_image} alt="" />
+            <div key={item.id} className="Card" onClick={() => {
+              setTrackList(listensMonthTracks)
+              goToPlaying(index, item.album_id || item.id, listensMonthTracks)
+            }}>
+              {item.album_image ? (
+                <img className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl" src={item.album_image} alt="專輯封面" />
+              ) : (
+                <div className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl bg-gray-400 flex items-center justify-center">
+                  <i className="fa-solid fa-music text-white text-2xl"></i>
+                </div>
+              )}
               <div className="Card-title max-h-12 overflow-hidden">{item.album_name}</div>
             </div>
           ))}
@@ -151,8 +199,17 @@ const Home = () => {
         <h3 className="Section-encoreTitle mt-6 mb-3">根據你最近聽過的音樂</h3>
         <div className="Card-container">
           {trackList.map((item, index) => (
-            <div key={item.id} className="Card" onClick={() => goToPlaying(index, item.id)}>
-              <img className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl" src={item.album_image} alt="" />
+            <div key={item.id} className="Card" onClick={() => {
+              goToPlaying(index, item.album_id || item.id, trackList)
+              // onClick={() => goToPlaying(index, item.id)}  如果 album_id 不存在就使用 id
+            }}>
+              {item.album_image ? (
+                <img className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl" src={item.album_image} alt="專輯封面" />
+              ) : (
+                <div className="Card-image w-[152px] h-[152px] mb-2 rounded-2xl bg-gray-400 flex items-center justify-center">
+                  <i className="fa-solid fa-music text-white text-2xl"></i>
+                </div>
+              )}
               <div className="Card-title max-h-12 overflow-hidden">{item.name}</div>
             </div>
           ))}

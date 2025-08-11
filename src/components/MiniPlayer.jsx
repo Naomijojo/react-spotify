@@ -1,11 +1,9 @@
 import { useNavigate } from "react-router-dom"
 import { Slider } from "antd"
-  import { useRef } from "react"
 import { useMusicStore } from "@/store/music"
 
 const MiniPlayer = () => {
   const navigate = useNavigate()
-    const audioRef = useRef(null)
   const { 
     currentTrack,
     isPlaying,
@@ -14,15 +12,19 @@ const MiniPlayer = () => {
     toggleFavorite,
     progress,
     duration,
+    setCurrentTime
   } = useMusicStore()
-  
-  
+
   const GoToDefaultPlaying = () => {
     navigate(`/playing`)
   }
 
-  if ( !currentTrack) return null
+  // 進度條拖動控制
+  const handleProgressChange = (value) => {
+    setCurrentTime(value)
+  }
 
+  if ( !currentTrack) return null
 
   return (
     <div className="mini-player">
@@ -44,7 +46,7 @@ const MiniPlayer = () => {
         </button>
         <button className="mini-player__btn" onClick={togglePlaying}>
           {isPlaying ? (
-            <i class="fa-solid fa-pause "></i> 
+            <i className="fa-solid fa-pause "></i> 
           ):(
             <i className="fa-solid fa-play"></i> 
           )}
@@ -55,14 +57,9 @@ const MiniPlayer = () => {
           value={progress}
           tooltip={{ open: false }} 
           max={duration || 0}   // 歌曲總時長 預設0
+          onChange={handleProgressChange}
         />
       </div>
-
-      <audio
-        ref={audioRef}
-        src={currentTrack?.audio} 
-        hidden
-      />
 
     </div>
   )

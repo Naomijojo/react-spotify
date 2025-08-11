@@ -17,12 +17,14 @@ const SearchRecent = () => {
   const [ loading, setLoading ] = useState(false)
   const { setTrackList, playTrack } = useMusicStore()           // 從播放列表並播放選中的歌曲
 
-  useEffect(() => async () => {
+  useEffect(() => {
     const getResults = async () => {
       setLoading(true)     // 開始加載
       try {
         const data = await myMusicApi.getTracks(40)
         console.log('從getTracks api篩選出來的歌有:', data)
+        console.log('recommendedTracks 數據結構:', data.recommendedTracks)
+        console.log('recommendedTracks 第一個項目:', data.recommendedTracks[0])
         setSearchResults(data.recommendedTracks)
       } catch (error) {
         console.error('獲取歌曲時錯誤:', error)
@@ -34,13 +36,21 @@ const SearchRecent = () => {
   },[])
 
   useEffect(() => {
-    // 篩選結果(讓首字母不分大小寫)
-    const results = searchResults.filter(item => item.name.toLowerCase().startsWith(searchQuery.toLowerCase()))
-    setFilteredResults(results)
+    // 篩選結果
+    if (searchQuery.trim() === '') {
+      // 如果搜尋關鍵字為空，顯示所有結果
+      setFilteredResults(searchResults)
+    } else {
+      // 如果有搜尋關鍵字，進行篩選
+      const results = searchResults.filter(item => 
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      setFilteredResults(results)
+    }
   }, [searchResults, searchQuery])
 
 
-  const handleInputChange = (e) => {    //事件對象(event object)
+  const handleInputChange = (e) => {    
     setSearchQuery(e.target.value)
   }
 
@@ -53,20 +63,16 @@ const SearchRecent = () => {
   }
 
   const handlePlay = (track, index) => {
+    console.log('點擊播放:', track)
+    console.log('audio URL:', track.audio)
     setTrackList(filteredResults); // 設置當前的播放列表
     playTrack(index);              // 播放選中的歌曲
   }
-  
-
-
-  // const handleSearch = (keyword) => {
-  //   const filteredData = searchResults.filter(item => item.title.includes(keyword))
-  //   setFilteredResults(filteredData)
-  // }
-  // 80 搜尋歷史紀錄->待完成中...  
+   
 
 
   if(loading) return <Loading />
+  
   return (
     <div className="flex flex-col h-full">
       <div className="recent-input-container flex items-center p-3">
@@ -76,12 +82,14 @@ const SearchRecent = () => {
         <div className="flex w-full relative ml-2">
           <i className="absolute top-[50%] left-3 fa-solid fa-magnifying-glass" style={{ color: "#000", transform: "translateY(-50%)" }}></i>
           <input 
-          type="text" 
-          value={searchQuery} 
-          onChange={handleInputChange} 
-          placeholder="想聽什麼？" 
-          className="search-input flex-1 pl-10 py-2 border border-gray-300 rounded-md" 
-          maxLength={"50"}
+            type="text" 
+            value={searchQuery} 
+            onChange={handleInputChange} 
+            placeholder="想聽什麼？" 
+            className="search-input flex-1 pl-10 py-2 border border-gray-300 rounded-md text-black bg-white" 
+            maxLength={"50"}
+            style={{ color: '#000' }}
+            autoFocus
           />
           {searchQuery &&(
             <button onClick={clearInput} className="absolute right-3 top-[50%] transform -translate-y-[50%]">

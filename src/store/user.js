@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export const useUserStore = create(
-  persist(                                    //persist=持久化設定 會存在storage裡(key & value)
+  persist(                                    
     (set) => ({
       // token:使用者登入後的token
       token: '',
